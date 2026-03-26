@@ -3,6 +3,7 @@
   "package": "com.example.mod.mixins",
   "mixins": [
     "MinecraftMixin",
-    "ChatCommandMixin"
+    "ChatCommandMixin",
+    "MinecraftAccessor"
   ]
 }

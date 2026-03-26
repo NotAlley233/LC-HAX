@@ -9,10 +9,11 @@ import com.example.mod.command.commands.ToggleCommand;
 import com.example.mod.config.ConfigStore;
 import com.example.mod.listener.RenderGameOverlayEventListener;
 import com.example.mod.module.ModuleManager;
-import com.example.mod.module.modules.ModuleA;
+import com.example.mod.module.modules.AutoClicker;
 import com.example.mod.module.modules.PrefixModule;
 import com.example.mod.property.PropertyManager;
 import com.example.mod.property.properties.BooleanProperty;
+import com.example.mod.property.properties.IntProperty;
 import com.example.mod.property.properties.TextProperty;
 import com.example.mod.util.ChatUtil;
 import net.weavemc.api.KeyboardEvent;
@@ -32,9 +33,9 @@ public class ExampleMod implements ModInitializer {
 
         // ---- Command + Module system (client-side dot commands) ----
         ModuleManager moduleManager = new ModuleManager();
-        moduleManager.register(new ModuleA());
         // Prefix module must be registered before loading config so its enabled state is applied.
         moduleManager.register(new PrefixModule(true));
+        moduleManager.register(new AutoClicker());
 
         Path configPath = ConfigStore.defaultConfigPath("examplemod.properties");
         ConfigStore configStore = new ConfigStore(configPath);
@@ -44,11 +45,15 @@ public class ExampleMod implements ModInitializer {
         // ---- myau-style Property system ----
         PropertyManager propertyManager = new PropertyManager();
 
-        ModuleA moduleA = (ModuleA) moduleManager.get("a");
-        if (moduleA != null) {
+        AutoClicker autoClicker = (AutoClicker) moduleManager.get("autoclicker");
+        if (autoClicker != null) {
             propertyManager.register(
-                    moduleA,
-                    new BooleanProperty("enabled", moduleA::enabled, moduleA::setEnabled)
+                    autoClicker,
+                    new BooleanProperty("enabled", autoClicker::enabled, autoClicker::setEnabled),
+                    new IntProperty("minCPS", autoClicker::getMinCPS, autoClicker::setMinCPS),
+                    new IntProperty("maxCPS", autoClicker::getMaxCPS, autoClicker::setMaxCPS),
+                    new BooleanProperty("blocks", autoClicker::isBlocks, autoClicker::setBlocks),
+                    new BooleanProperty("breakBlocks", autoClicker::isBreakBlocks, autoClicker::setBreakBlocks)
             );
         }
 
@@ -74,10 +79,13 @@ public class ExampleMod implements ModInitializer {
         commandManager.register(new ListCommand(moduleManager));
         commandManager.register(new ToggleCommand(moduleManager, configStore));
         commandManager.register(new PrefixCommand(configStore));
+        
+        // This command dynamically handles settings for all registered modules based on moduleManager.all()
         commandManager.register(new ModuleCommand(moduleManager, propertyManager, ""));
 
         // Expose for mixins (chat interception).
         ModContext.setCommandManager(commandManager);
+        ModContext.setModuleManager(moduleManager);
 
         EventBus.subscribe(KeyboardEvent.class, (e) -> {
             int keyCode = e.getKeyCode();
