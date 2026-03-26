@@ -21,8 +21,11 @@ public class ListCommand implements Command {
     @Override
     public void runCommand(ArrayList<String> args) {
         ChatUtil.info("Modules:");
-        for (Module m : moduleManager.all()) {
-            ChatUtil.info("  " + m.name() + " = " + (m.enabled() ? "ON" : "OFF") + " - " + m.description());
+        List<Module> modules = new ArrayList<>(moduleManager.all());
+        modules.sort((a, b) -> a.name().compareToIgnoreCase(b.name()));
+        for (Module m : modules) {
+            String statusColor = m.enabled() ? "§aon" : "§coff";
+            ChatUtil.sendFormatted(m.name() + "(" + statusColor + "§r)");
         }
     }
 }

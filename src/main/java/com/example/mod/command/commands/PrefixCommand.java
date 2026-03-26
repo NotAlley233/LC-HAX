@@ -33,7 +33,6 @@ public class PrefixCommand implements Command {
         // Prefix enable/disable is controlled via `.t prefix`
 
         String text = String.join(" ", args.subList(1, args.size()));
-        configStore.setPrefixText(text);
         ChatUtil.setPrefixText(text);
         ChatUtil.info("Prefix set to: " + text);
     }

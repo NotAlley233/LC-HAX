@@ -5,6 +5,8 @@ public interface Module {
 
     String description();
 
+    Category category();
+
     boolean enabled();
 
     void setEnabled(boolean enabled);

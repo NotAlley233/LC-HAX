@@ -7,8 +7,11 @@ public class ModuleManager {
     private final List<Module> modules = new ArrayList<>();
 
     public void register(Module module) {
+        if (module == null || module.name() == null) return;
+        String key = module.name().toLowerCase(Locale.ROOT);
+        if (byName.containsKey(key)) return;
         modules.add(module);
-        byName.put(module.name().toLowerCase(Locale.ROOT), module);
+        byName.put(key, module);
     }
 
     public Module get(String nameLowercase) {

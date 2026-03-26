@@ -4,6 +4,7 @@
   "mixins": [
     "MinecraftMixin",
     "ChatCommandMixin",
-    "MinecraftAccessor"
+    "MinecraftAccessor",
+    "NetHandlerPlayClientChatMixin"
   ]
 }

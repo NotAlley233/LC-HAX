@@ -1,6 +1,7 @@
 package com.example.mod.module.modules;
 
 import com.example.mod.module.BaseModule;
+import com.example.mod.module.Category;
 import com.example.mod.module.Tickable;
 import com.example.mod.mixins.MinecraftAccessor;
 import myau.util.MSTimer;
@@ -24,7 +25,7 @@ public class AutoClicker extends BaseModule implements Tickable {
     private Method clickMouseMethod = null;
 
     public AutoClicker() {
-        super(false);
+        super("autoclicker", "Automatically clicks for you.", Category.COMBAT, false);
         try {
             // Fallback reflection in case mixin fails due to mapping issues
             clickMouseMethod = Minecraft.class.getDeclaredMethod("clickMouse");
@@ -37,16 +38,6 @@ public class AutoClicker extends BaseModule implements Tickable {
             } catch (NoSuchMethodException ignored) {
             }
         }
-    }
-
-    @Override
-    public String name() {
-        return "autoclicker";
-    }
-
-    @Override
-    public String description() {
-        return "Automatically clicks for you.";
     }
 
     public int getMinCPS() { return minCPS; }

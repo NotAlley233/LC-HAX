@@ -4,6 +4,7 @@ import com.example.mod.command.Command;
 import com.example.mod.config.ConfigStore;
 import com.example.mod.module.Module;
 import com.example.mod.module.ModuleManager;
+import com.example.mod.property.PropertyManager;
 import com.example.mod.util.ChatUtil;
 
 import java.util.ArrayList;
@@ -14,10 +15,12 @@ import java.util.Locale;
 public class ToggleCommand implements Command {
     private final ModuleManager moduleManager;
     private final ConfigStore configStore;
+    private final PropertyManager propertyManager;
 
-    public ToggleCommand(ModuleManager moduleManager, ConfigStore configStore) {
+    public ToggleCommand(ModuleManager moduleManager, ConfigStore configStore, PropertyManager propertyManager) {
         this.moduleManager = moduleManager;
         this.configStore = configStore;
+        this.propertyManager = propertyManager;
     }
 
     @Override public List<String> names() { return Arrays.asList("toggle", "t"); }
@@ -50,7 +53,7 @@ public class ToggleCommand implements Command {
         if (!changed) return;
 
         m.setEnabled(!m.enabled());
-        configStore.saveFrom(moduleManager);
+        configStore.saveFrom(moduleManager, propertyManager);
         ChatUtil.sendFormatted(String.format("%s: %s&r", m.name(), m.enabled() ? "&a&lON" : "&c&lOFF"));
     }
 

@@ -2,21 +2,27 @@ package com.example.mod.config;
 
 import com.example.mod.module.Module;
 import com.example.mod.module.ModuleManager;
+import com.example.mod.property.PropertyManager;
+import com.example.mod.property.Property;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
+import com.example.mod.core.ModLogger;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.Reader;
+import java.io.Writer;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Properties;
+import java.util.Map;
 
 public class ConfigStore {
-    public static final String PREFIX_TEXT_KEY = "ui.prefixText";
-    public static final String PREFIX_ENABLED_KEY = "ui.prefixEnabled";
-
     private final Path path;
-    private final Properties properties = new Properties();
+    private JsonObject configObj = new JsonObject();
+    private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
 
     public ConfigStore(Path path) {
         this.path = path;
@@ -27,75 +33,60 @@ public class ConfigStore {
         return Paths.get("run").resolve(fileName);
     }
 
-    public void loadInto(ModuleManager moduleManager) {
+    public void loadInto(ModuleManager moduleManager, PropertyManager propertyManager) {
         for (Module m : moduleManager.all()) {
-            String key = keyFor(m.name());
-            String v = properties.getProperty(key);
-            if (v == null) continue;
-            m.setEnabled(Boolean.parseBoolean(v));
-        }
+            String moduleKey = m.name();
+            if (configObj.has(moduleKey)) {
+                JsonObject modJson = configObj.getAsJsonObject(moduleKey);
+                
+                // Load Module Enabled State
+                if (modJson.has("enabled")) {
+                    m.setEnabled(modJson.get("enabled").getAsBoolean());
+                }
 
-        // Backward-compatible: if old ui.prefixEnabled exists, map it onto the prefix module.
-        if (properties.getProperty(PREFIX_ENABLED_KEY) != null) {
-            Module prefix = moduleManager.get("prefix");
-            if (prefix != null) {
-                prefix.setEnabled(isPrefixEnabled());
+                // Load properties
+                if (propertyManager.getProperties(m) != null) {
+                    for (Property<?> prop : propertyManager.getProperties(m)) {
+                        if (modJson.has(prop.getName())) {
+                            try {
+                                String valStr = modJson.get(prop.getName()).getAsString();
+                                prop.parseString(valStr);
+                            } catch (Exception e) {
+                                ModLogger.error("Failed to parse property " + prop.getName() + " for module " + m.name(), e);
+                            }
+                        }
+                    }
+                }
             }
         }
     }
 
-    public void saveFrom(ModuleManager moduleManager) {
+    public void saveFrom(ModuleManager moduleManager, PropertyManager propertyManager) {
         for (Module m : moduleManager.all()) {
-            properties.setProperty(keyFor(m.name()), Boolean.toString(m.enabled()));
+            JsonObject modJson = new JsonObject();
+            modJson.addProperty("enabled", m.enabled());
+
+            if (propertyManager.getProperties(m) != null) {
+                for (Property<?> prop : propertyManager.getProperties(m)) {
+                    modJson.addProperty(prop.getName(), String.valueOf(prop.getValue()));
+                }
+            }
+
+            configObj.add(m.name(), modJson);
         }
 
-        persist();
-    }
-
-    public String getPrefixText() {
-        return getString(PREFIX_TEXT_KEY, "prefix");
-    }
-
-    public void setPrefixText(String text) {
-        if (text == null || text.trim().isEmpty()) {
-            properties.remove(PREFIX_TEXT_KEY);
-        } else {
-            properties.setProperty(PREFIX_TEXT_KEY, text);
-        }
-        persist();
-    }
-
-    public boolean isPrefixEnabled() {
-        return getBoolean(PREFIX_ENABLED_KEY, true);
-    }
-
-    public void setPrefixEnabled(boolean enabled) {
-        properties.setProperty(PREFIX_ENABLED_KEY, Boolean.toString(enabled));
-        persist();
-    }
-
-    public String getString(String key, String defaultValue) {
-        String v = properties.getProperty(key);
-        return v == null ? defaultValue : v;
-    }
-
-    public boolean getBoolean(String key, boolean defaultValue) {
-        String v = properties.getProperty(key);
-        return v == null ? defaultValue : Boolean.parseBoolean(v);
-    }
-
-    public void setString(String key, String value) {
-        if (value == null) properties.remove(key);
-        else properties.setProperty(key, value);
         persist();
     }
 
     public void reload() {
-        properties.clear();
         if (!Files.exists(path)) return;
-        try (InputStream in = Files.newInputStream(path)) {
-            properties.load(in);
-        } catch (IOException ignored) {
+        try (Reader reader = Files.newBufferedReader(path)) {
+            JsonElement element = new JsonParser().parse(reader);
+            if (element.isJsonObject()) {
+                configObj = element.getAsJsonObject();
+            }
+        } catch (IOException e) {
+            ModLogger.error("Failed to read config", e);
         }
     }
 
@@ -103,14 +94,11 @@ public class ConfigStore {
         try {
             Path parent = path.getParent();
             if (parent != null) Files.createDirectories(parent);
-            try (OutputStream out = Files.newOutputStream(path)) {
-                properties.store(out, "ExampleMod settings");
+            try (Writer writer = Files.newBufferedWriter(path)) {
+                GSON.toJson(configObj, writer);
             }
-        } catch (IOException ignored) {
+        } catch (IOException e) {
+            ModLogger.error("Failed to save config", e);
         }
-    }
-
-    private static String keyFor(String moduleName) {
-        return "module." + moduleName;
     }
 }
