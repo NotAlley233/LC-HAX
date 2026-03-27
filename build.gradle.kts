@@ -7,11 +7,11 @@ version = "1.0.0"
 
 weave {
     configure {
-        name = "ExampleMod"
-        modId = "examplemod"
-        entryPoints = listOf("com.example.mod.ExampleMod")
+        name = "LC-HAX"
+        modId = "lchax"
+        entryPoints = listOf("com.example.mod.LCHax")
         hooks = listOf("com.example.mod.hook.MinecraftHook")
-        mixinConfigs = listOf("examplemod.mixins.json")
+        mixinConfigs = listOf("lchax.mixins.json")
         mcpMappings()
     }
     version("1.8.9")

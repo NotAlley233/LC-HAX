@@ -46,5 +46,8 @@ public class ModeProperty extends Property<String> {
         }
         return sb.toString();
     }
-}
 
+    public List<String> getModes() {
+        return modes;
+    }
+}

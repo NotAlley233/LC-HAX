@@ -1,7 +1,6 @@
 package com.example.mod.util.render;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.Gui;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.WorldRenderer;
@@ -9,8 +8,11 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.Color;
+import java.awt.Font;
 
 public class RenderUtil {
+    private static CustomFontRenderer customFont = null;
+    private static boolean useProductFont = false;
     
     public static void drawRect(float x, float y, float width, float height, int color) {
         float alpha = (float) (color >> 24 & 255) / 255.0F;
@@ -38,10 +40,10 @@ public class RenderUtil {
     }
 
     public static void drawOutlineRect(float x, float y, float width, float height, float lineWidth, int color) {
-        drawRect(x, y, x + width, y + lineWidth, color);
-        drawRect(x, y, x + lineWidth, y + height, color);
-        drawRect(x, y + height - lineWidth, x + width, y + height, color);
-        drawRect(x + width - lineWidth, y, x + width, y + height, color);
+        drawRect(x, y, width, lineWidth, color);
+        drawRect(x, y + height - lineWidth, width, lineWidth, color);
+        drawRect(x, y, lineWidth, height, color);
+        drawRect(x + width - lineWidth, y, lineWidth, height, color);
     }
 
     public static void prepareScissorBox(float x, float y, float x2, float y2) {
@@ -50,25 +52,46 @@ public class RenderUtil {
         GL11.glScissor((int) (x * factor), (int) ((scale.getScaledHeight() - y2) * factor), (int) ((x2 - x) * factor), (int) ((y2 - y) * factor));
     }
 
+    public static void scissor(float x, float y, float width, float height) {
+        GL11.glEnable(GL11.GL_SCISSOR_TEST);
+        prepareScissorBox(x, y, x + width, y + height);
+    }
+
+    public static void releaseScissor() {
+        GL11.glDisable(GL11.GL_SCISSOR_TEST);
+    }
+
     public static int applyOpacity(int color, float opacity) {
         Color c = new Color(color, true);
         return new Color(c.getRed(), c.getGreen(), c.getBlue(), (int) (c.getAlpha() * opacity)).getRGB();
     }
 
-    private static CustomFontRenderer customFont = null;
+    public static void setUseProductFont(boolean enabled) {
+        useProductFont = enabled;
+        if (enabled && customFont == null) {
+            initCustomFont();
+        }
+    }
 
-    public static void initCustomFont() {
+    public static boolean isUseProductFont() {
+        return useProductFont;
+    }
+
+    private static void initCustomFont() {
         try {
-            // Use a default system font if we don't have a ttf file in resources
-            // Or fallback to MC font if custom font fails
-            // For now, we will just use a wrapper that falls back to MC font if custom is null
-        } catch (Exception e) {
-            e.printStackTrace();
+            customFont = new CustomFontRenderer("/assets/lchax/fonts/productsans.ttf", 16);
+        } catch (Exception ignored) {
+            try {
+                customFont = new CustomFontRenderer(new Font("SansSerif", Font.PLAIN, 16), 16);
+            } catch (Exception ignored2) {
+                customFont = null;
+                useProductFont = false;
+            }
         }
     }
 
     public static void drawString(String text, float x, float y, int color) {
-        if (customFont != null) {
+        if (useProductFont && customFont != null) {
             customFont.drawString(text, x, y, color);
         } else {
             Minecraft.getMinecraft().fontRendererObj.drawStringWithShadow(text, x, y, color);
@@ -76,7 +99,7 @@ public class RenderUtil {
     }
     
     public static int getStringWidth(String text) {
-        if (customFont != null) {
+        if (useProductFont && customFont != null) {
             return customFont.getStringWidth(text);
         }
         return Minecraft.getMinecraft().fontRendererObj.getStringWidth(text);

@@ -38,6 +38,12 @@ public class CustomFontRenderer {
         }
     }
 
+    public CustomFontRenderer(Font font, int size) {
+        Font baseFont = font.deriveFont(Font.PLAIN, (float) size);
+        this.height = 16 + size / 2;
+        this.texture = this.generateTexture(baseFont);
+    }
+
     private DynamicTexture generateTexture(Font font) {
         BufferedImage img = new BufferedImage(512, 512, BufferedImage.TYPE_INT_ARGB);
         Graphics2D g = img.createGraphics();
@@ -111,4 +117,3 @@ public class CustomFontRenderer {
         return this.height;
     }
 }
-

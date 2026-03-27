@@ -11,12 +11,14 @@ import com.example.mod.util.ChatUtil;
 import com.example.mod.util.GamemodeUtil;
 import com.example.mod.util.NameUtil;
 import com.example.mod.util.TeamUtil;
-import net.minecraft.block.BlockBed;
+import com.example.mod.util.render.RenderUtil;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.audio.PositionedSoundRecord;
+import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.BlockPos;
-import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
 import net.minecraft.util.Vec3;
 
 import java.util.HashMap;
@@ -25,245 +27,187 @@ import java.util.UUID;
 import java.util.function.Consumer;
 
 public class BedTracker extends BaseModule implements Tickable, OverlayRenderable {
+    private int maxDistance = 25;
+    private int alertCooldownSeconds = 10;
+    private boolean showHud = true;
+    private int hudX = 10;
+    private int hudY = 10;
+    private boolean pingSound = true;
+    private boolean forceScan = false;
+
     private BlockPos bedPos = null;
     private long bedScanTime = 0L;
     private long startTime = 0L;
     private boolean rangeAlert = false;
     private final Map<UUID, Long> lastAlertTimes = new HashMap<>();
+
     private final Consumer<ChatReceiveEvent> chatListener = this::onChatReceived;
 
-    private float hudScale = 1.0f;
-    private int alertCooldownSeconds = 5;
-    private int maxDistance = 40;
-    private boolean pingSound = true;
-    private boolean showHud = true;
-    private int hudX = 5;
-    private int hudY = 70;
-    private int hudRed = 255;
-    private int hudGreen = 255;
-    private int hudBlue = 255;
-
     public BedTracker() {
-        super("bedtracker", "Alerts when enemies are near your bed and shows bed distance.", Category.BEDWARS, false);
+        super("bedtracker", "Alerts when enemies are near your bed.", Category.UTILITY, false);
     }
 
-    public float getHudScale() {
-        return hudScale;
-    }
+    public int getMaxDistance() { return maxDistance; }
+    public void setMaxDistance(int maxDistance) { this.maxDistance = maxDistance; }
 
-    public void setHudScale(float hudScale) {
-        this.hudScale = hudScale;
-    }
+    public int getAlertCooldownSeconds() { return alertCooldownSeconds; }
+    public void setAlertCooldownSeconds(int alertCooldownSeconds) { this.alertCooldownSeconds = alertCooldownSeconds; }
 
-    public int getAlertCooldownSeconds() {
-        return alertCooldownSeconds;
-    }
+    public boolean isShowHud() { return showHud; }
+    public void setShowHud(boolean showHud) { this.showHud = showHud; }
 
-    public void setAlertCooldownSeconds(int alertCooldownSeconds) {
-        this.alertCooldownSeconds = alertCooldownSeconds;
-    }
+    public int getHudX() { return hudX; }
+    public void setHudX(int hudX) { this.hudX = hudX; }
 
-    public int getMaxDistance() {
-        return maxDistance;
-    }
+    public int getHudY() { return hudY; }
+    public void setHudY(int hudY) { this.hudY = hudY; }
 
-    public void setMaxDistance(int maxDistance) {
-        this.maxDistance = maxDistance;
-    }
+    public boolean isPingSound() { return pingSound; }
+    public void setPingSound(boolean pingSound) { this.pingSound = pingSound; }
 
-    public boolean isPingSound() {
-        return pingSound;
-    }
-
-    public void setPingSound(boolean pingSound) {
-        this.pingSound = pingSound;
-    }
-
-    public boolean isShowHud() {
-        return showHud;
-    }
-
-    public void setShowHud(boolean showHud) {
-        this.showHud = showHud;
-    }
-
-    public int getHudX() {
-        return hudX;
-    }
-
-    public void setHudX(int hudX) {
-        this.hudX = hudX;
-    }
-
-    public int getHudY() {
-        return hudY;
-    }
-
-    public void setHudY(int hudY) {
-        this.hudY = hudY;
-    }
-
-    public int getHudRed() {
-        return hudRed;
-    }
-
-    public void setHudRed(int hudRed) {
-        this.hudRed = hudRed;
-    }
-
-    public int getHudGreen() {
-        return hudGreen;
-    }
-
-    public void setHudGreen(int hudGreen) {
-        this.hudGreen = hudGreen;
-    }
-
-    public int getHudBlue() {
-        return hudBlue;
-    }
-
-    public void setHudBlue(int hudBlue) {
-        this.hudBlue = hudBlue;
+    public boolean isForceScan() { return forceScan; }
+    public void setForceScan(boolean forceScan) {
+        this.forceScan = forceScan;
+        if (forceScan) {
+            forceScanBed();
+            this.forceScan = false; // Reset immediately to act as a button
+        }
     }
 
     @Override
-    protected void onEnable() {
+    public void onEnable() {
+        super.onEnable();
         ChatReceiveDispatcher.subscribe(chatListener);
     }
 
     @Override
-    protected void onDisable() {
+    public void onDisable() {
+        super.onDisable();
         ChatReceiveDispatcher.unsubscribe(chatListener);
         clear();
     }
 
-    @Override
-    public void onTick() {
-        GamemodeUtil.updateGamemode();
-        if (!GamemodeUtil.isBedwars()) {
-            clear();
-            return;
-        }
-
-        Minecraft mc = Minecraft.getMinecraft();
-        if (mc.thePlayer == null || mc.theWorld == null) {
-            clear();
-            return;
-        }
-
-        TeamUtil.updateSpectatorState();
-        if (bedPos == null && bedScanTime > 0L && System.currentTimeMillis() > bedScanTime) {
-            bedPos = findNearbyBed(mc.thePlayer.getPosition(), 25);
-            bedScanTime = 0L;
-            if (bedPos != null) {
-                ChatUtil.info(EnumChatFormatting.GREEN + "✓ " + EnumChatFormatting.RESET + "Whitelisted your bed at" +
-                        EnumChatFormatting.GRAY + " (" + EnumChatFormatting.GREEN + bedPos.getX() + ", " + bedPos.getY() + ", " + bedPos.getZ() + EnumChatFormatting.GRAY + ")");
-            } else {
-                ChatUtil.info(EnumChatFormatting.RED + "⚠ Error locating your bed.");
-            }
-        }
-
-        if (bedPos != null && isBedOutOfRange() && !rangeAlert) {
-            ChatUtil.info(EnumChatFormatting.LIGHT_PURPLE + "" + EnumChatFormatting.BOLD + "⚠ Your bed is out of range!");
-            rangeAlert = true;
-        } else if (bedPos != null && !isBedOutOfRange()) {
-            rangeAlert = false;
-        }
-
-        if (bedPos == null || TeamUtil.inSpectator()) {
-            return;
-        }
-
-        long currentTime = System.currentTimeMillis();
-        if (currentTime - startTime < 6000L) {
-            return;
-        }
-
-        for (EntityPlayer player : mc.theWorld.playerEntities) {
-            if (player == mc.thePlayer || AntiBot.isBot(player) || TeamUtil.ignoreTeam(player.getName())) {
-                continue;
-            }
-            if (player.capabilities.isFlying || player.ticksExisted < 100) {
-                continue;
-            }
-            int distanceToBed = (int) player.getDistance(bedPos.getX(), bedPos.getY(), bedPos.getZ());
-            if (distanceToBed > maxDistance) {
-                continue;
-            }
-            UUID uuid = player.getUniqueID();
-            long lastAlert = lastAlertTimes.getOrDefault(uuid, 0L);
-            if (currentTime - lastAlert < alertCooldownSeconds * 1000L) {
-                continue;
-            }
-            String distanceColor = distanceToBed <= 5 ? EnumChatFormatting.DARK_RED.toString()
-                    : distanceToBed <= 15 ? EnumChatFormatting.RED.toString()
-                    : distanceToBed <= 30 ? EnumChatFormatting.GOLD.toString()
-                    : distanceToBed <= 40 ? EnumChatFormatting.YELLOW.toString()
-                    : EnumChatFormatting.GREEN.toString();
-            ChatUtil.info(NameUtil.getTabDisplayName(player.getName()) + EnumChatFormatting.WHITE + " is " +
-                    distanceColor + distanceToBed + EnumChatFormatting.WHITE + " blocks from your bed! " + distanceColor + "⚠");
-            lastAlertTimes.put(uuid, currentTime);
-            if (pingSound && mc.thePlayer != null) {
-                mc.thePlayer.playSound("random.orb", 1.0f, 1.0f);
-            }
-        }
-
-        lastAlertTimes.keySet().removeIf(uuid -> mc.theWorld.getPlayerEntityByUUID(uuid) == null);
-    }
-
-    @Override
-    public void onRenderOverlay() {
-        Minecraft mc = Minecraft.getMinecraft();
-        if (!showHud || mc.thePlayer == null || mc.theWorld == null || mc.currentScreen != null) {
-            return;
-        }
-        if (!GamemodeUtil.isBedwars()) {
-            return;
-        }
-        String cross = EnumChatFormatting.RED + "✗";
-        String check = EnumChatFormatting.GREEN + "✓";
-        String separator = bedPos != null ? EnumChatFormatting.GRAY + " | " + EnumChatFormatting.RESET : "";
-        EnumChatFormatting distanceColor = getDistanceToBed() < 70 ? EnumChatFormatting.GREEN : isBedOutOfRange() ? EnumChatFormatting.RED : EnumChatFormatting.YELLOW;
-        String distance = bedPos == null ? "" : ("Distance: " + distanceColor + getDistanceToBed());
-        String out = isBedOutOfRange() && bedPos != null ? EnumChatFormatting.RED + " ⚠" : "";
-        String text = "Bed: " + (bedPos == null ? cross : check) + separator + distance + out;
-        int color = (hudRed << 16) | (hudGreen << 8) | hudBlue;
-        GlStateManager.pushMatrix();
-        GlStateManager.scale(hudScale, hudScale, hudScale);
-        mc.fontRendererObj.drawStringWithShadow(text, hudX / hudScale, hudY / hudScale, color);
-        GlStateManager.popMatrix();
-    }
-
     private void onChatReceived(ChatReceiveEvent event) {
         String msg = event.getMessage();
-        if (!GamemodeUtil.isBedwars()) {
-            return;
-        }
+        if (!GamemodeUtil.isBedwars()) return;
+
         if (!msg.contains(":")) {
             if (msg.contains("The game starts in 1 second!")) {
                 bedPos = null;
                 bedScanTime = System.currentTimeMillis() + 6000L;
                 startTime = System.currentTimeMillis() + 7000L;
+                ChatUtil.sendFormatted("&e[BedTracker] &fLocating bed in 6s...");
             } else if (msg.contains("You will respawn because you still have a bed!")) {
                 bedPos = null;
                 bedScanTime = System.currentTimeMillis() + 12000L;
                 startTime = System.currentTimeMillis() + 13000L;
+                ChatUtil.sendFormatted("&e[BedTracker] &fLocating bed in 12s...");
             }
         }
+
         if (msg.startsWith("BED DESTRUCTION > Your Bed")) {
             bedPos = null;
-            ChatUtil.info(EnumChatFormatting.DARK_RED + "" + EnumChatFormatting.BOLD + "⚠ Your bed was destroyed!");
+            ChatUtil.sendFormatted("&4&l⚠ Your bed was destroyed!");
         }
     }
 
-    private BlockPos findNearbyBed(BlockPos center, int radius) {
+    private void forceScanBed() {
         Minecraft mc = Minecraft.getMinecraft();
+        if (mc.thePlayer == null || mc.theWorld == null) return;
+        bedPos = findNearbyBed(mc.theWorld, mc.thePlayer.getPosition(), 25);
+        if (bedPos != null) {
+            ChatUtil.sendFormatted("&a&l✓ &rWhitelisted your bed at &7(&a" + bedPos.getX() + ", " + bedPos.getY() + ", " + bedPos.getZ() + "&7)");
+            startTime = System.currentTimeMillis(); // Allow alerts immediately
+        } else {
+            ChatUtil.sendFormatted("&c⚠ Error locating your bed manually. Are you near it?");
+        }
+    }
+
+    @Override
+    public void onTick() {
+        Minecraft mc = Minecraft.getMinecraft();
+        if (mc.thePlayer == null || mc.theWorld == null) return;
+        
+        // Gamemode status is refreshed globally in MinecraftMixin.runTick.
+        if (!GamemodeUtil.isBedwars()) return;
+
+        // Auto Scan
+        if (bedPos == null && bedScanTime > 0L && System.currentTimeMillis() > bedScanTime) {
+            bedPos = findNearbyBed(mc.theWorld, mc.thePlayer.getPosition(), 25);
+            bedScanTime = 0L;
+            if (bedPos != null) {
+                ChatUtil.sendFormatted("&a&l✓ &rWhitelisted your bed at &7(&a" + bedPos.getX() + ", " + bedPos.getY() + ", " + bedPos.getZ() + "&7)");
+            } else {
+                ChatUtil.sendFormatted("&c⚠ Error locating your bed automatically.");
+            }
+        }
+
+        // Out of range alert
+        if (bedPos != null && isBedOutOfRange() && !rangeAlert) {
+            ChatUtil.sendFormatted("&d&l⚠ Your bed is out of range!");
+            rangeAlert = true;
+        } else if (!isBedOutOfRange() && bedPos != null) {
+            rangeAlert = false;
+        }
+
+        // Enemy proximity check
+        if (bedPos != null && mc.theWorld != null && !TeamUtil.inSpectator()) {
+            long currentTime = System.currentTimeMillis();
+            if (currentTime - startTime < 6000L) return;
+
+            for (EntityPlayer player : mc.theWorld.playerEntities) {
+                if (player == mc.thePlayer || AntiBot.isBot(player) || TeamUtil.ignoreTeam(player.getName())) continue;
+                if (player.capabilities.isFlying || player.posY > 100) continue; // Basic spectator/cage check
+
+                double distanceToBed = player.getDistance(bedPos.getX(), bedPos.getY(), bedPos.getZ());
+                if (distanceToBed > maxDistance) continue;
+
+                UUID uuid = player.getUniqueID();
+                long lastAlert = lastAlertTimes.getOrDefault(uuid, 0L);
+
+                if (currentTime - lastAlert >= alertCooldownSeconds * 1000L) {
+                    String distanceColor = (distanceToBed <= 5) ? "&4" : ((distanceToBed <= 15) ? "&c" : ((distanceToBed <= 30) ? "&6" : "&e"));
+                    ChatUtil.sendFormatted(NameUtil.getTabDisplayName(player.getName()) + "&f is " + distanceColor + (int)distanceToBed + "&f blocks from your bed!" + distanceColor + " ⚠");
+                    
+                    lastAlertTimes.put(uuid, currentTime);
+                    if (pingSound) {
+                        playPingSound();
+                    }
+                }
+            }
+            lastAlertTimes.keySet().removeIf(uuid -> mc.theWorld.getPlayerEntityByUUID(uuid) == null);
+        }
+    }
+
+    @Override
+    public void onRenderOverlay() {
+        Minecraft mc = Minecraft.getMinecraft();
+        if (mc.thePlayer == null || mc.theWorld == null || mc.currentScreen != null) return;
+        if (!GamemodeUtil.isBedwars() || !showHud) return;
+
+        String cross = "§c✗";
+        String checkMark = "§a✓";
+        String separator = (bedPos != null) ? "§7 | §r" : "";
+        
+        String bedState = (bedPos == null) ? cross : checkMark;
+        String bed = "Bed: ";
+        
+        int dist = getDistanceToBed();
+        String distanceColor = (dist < 70) ? "§a" : (isBedOutOfRange() ? "§c" : "§e");
+        String distance = (bedPos == null) ? "" : ("Distance: " + distanceColor + dist);
+        String doesChunkExist = (isBedOutOfRange() && bedPos != null) ? "§c ⚠" : "";
+        
+        String text = bed + bedState + separator + distance + doesChunkExist;
+        
+        RenderUtil.drawString(text, hudX, hudY, 0xFFFFFFFF);
+    }
+
+    private BlockPos findNearbyBed(World world, BlockPos center, int radius) {
         for (int x = center.getX() - radius; x <= center.getX() + radius; x++) {
             for (int y = center.getY() - radius; y <= center.getY() + radius; y++) {
                 for (int z = center.getZ() - radius; z <= center.getZ() + radius; z++) {
                     BlockPos pos = new BlockPos(x, y, z);
-                    if (mc.theWorld.getBlockState(pos).getBlock() instanceof BlockBed) {
+                    if (world.getBlockState(pos).getBlock() instanceof net.minecraft.block.BlockBed) {
                         return pos;
                     }
                 }
@@ -273,35 +217,42 @@ public class BedTracker extends BaseModule implements Tickable, OverlayRenderabl
     }
 
     private int getDistanceToBed() {
+        if (bedPos == null) return 0;
         Minecraft mc = Minecraft.getMinecraft();
-        if (bedPos == null || mc.thePlayer == null) {
-            return 0;
-        }
         Vec3 playerPos = mc.thePlayer.getPositionVector();
-        return (int) Math.sqrt(playerPos.squareDistanceTo(new Vec3(bedPos.getX() + 0.5D, bedPos.getY(), bedPos.getZ() + 0.5D)));
+        return (int) Math.sqrt(playerPos.squareDistanceTo(new Vec3(bedPos.getX() + 0.5, bedPos.getY(), bedPos.getZ() + 0.5)));
     }
 
     private boolean isBedOutOfRange() {
+        if (bedPos == null) return true;
         Minecraft mc = Minecraft.getMinecraft();
-        if (bedPos == null || mc.thePlayer == null || mc.theWorld == null) {
-            return true;
-        }
         int chunkX = bedPos.getX() >> 4;
         int chunkZ = bedPos.getZ() >> 4;
         boolean serverOutOfRange = !mc.theWorld.getChunkProvider().chunkExists(chunkX, chunkZ);
+
         int renderDistanceBlocks = mc.gameSettings.renderDistanceChunks * 16;
         double dx = mc.thePlayer.posX - bedPos.getX();
         double dz = mc.thePlayer.posZ - bedPos.getZ();
         double horizontalDistance = Math.sqrt(dx * dx + dz * dz);
-        boolean clientOutOfRange = horizontalDistance > renderDistanceBlocks;
+        boolean clientOutOfRange = (horizontalDistance > renderDistanceBlocks);
+
         return serverOutOfRange || clientOutOfRange;
+    }
+
+    private void playPingSound() {
+        Minecraft mc = Minecraft.getMinecraft();
+        SoundHandler soundHandler = mc.getSoundHandler();
+        if (soundHandler != null) {
+            PositionedSoundRecord positionedSoundRecord = PositionedSoundRecord.create(new ResourceLocation("random.orb"));
+            soundHandler.playSound(positionedSoundRecord);
+        }
     }
 
     public void clear() {
         bedPos = null;
         bedScanTime = 0L;
         startTime = 0L;
-        rangeAlert = false;
         lastAlertTimes.clear();
+        rangeAlert = false;
     }
 }

@@ -15,11 +15,11 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class ModLogger {
-    private static final Logger LOGGER = LogManager.getLogger("ExampleMod");
+    private static final Logger LOGGER = LogManager.getLogger("LC-HAX");
     private static boolean verbose = false;
     private static Path logFile = null;
     private static final ExecutorService logExecutor = Executors.newSingleThreadExecutor(r -> {
-        Thread t = new Thread(r, "ModLogger-Thread");
+        Thread t = new Thread(r, "NotAlley-Logger-Thread");
         t.setDaemon(true);
         return t;
     });

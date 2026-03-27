@@ -6,8 +6,7 @@ public enum Category {
     PLAYER("Player"),
     RENDER("Render"),
     UTILITY("Utility"),
-    ADVANCED("Advanced"),
-    BEDWARS("Bedwars");
+    ADVANCED("Advanced");
 
     private final String name;
 

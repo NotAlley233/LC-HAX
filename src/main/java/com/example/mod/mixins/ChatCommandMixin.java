@@ -12,7 +12,7 @@ import net.minecraft.client.entity.EntityPlayerSP;
 @Mixin(EntityPlayerSP.class)
 public abstract class ChatCommandMixin {
     @Inject(method = "sendChatMessage", at = @At("HEAD"), cancellable = true)
-    private void examplemod$onSendChatMessage(String message, CallbackInfo ci) {
+    private void lchax$onSendChatMessage(String message, CallbackInfo ci) {
         CommandManager mgr = ModContext.getCommandManager();
         if (mgr == null) return;
 
@@ -22,4 +22,3 @@ public abstract class ChatCommandMixin {
         mgr.handleCommand(message);
     }
 }
-

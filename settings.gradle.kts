@@ -10,4 +10,4 @@ plugins {
     id("org.gradle.toolchains.foojay-resolver-convention") version "0.8.+"
 }
 
-rootProject.name = "ExampleMod"
+rootProject.name = "LC-HAX"

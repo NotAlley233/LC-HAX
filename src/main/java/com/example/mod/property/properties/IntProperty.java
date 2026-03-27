@@ -9,20 +9,36 @@ public class IntProperty extends Property<Integer> {
     private final IntSupplier getter;
     private final IntConsumer setter;
     private final String prompt;
+    private final int min;
+    private final int max;
 
-    public IntProperty(String name, IntSupplier getter, IntConsumer setter) {
-        this(name, getter, setter, "int");
+    public IntProperty(String name, IntSupplier getter, IntConsumer setter, int min, int max) {
+        this(name, getter, setter, min, max, "int");
     }
 
-    public IntProperty(String name, IntSupplier getter, IntConsumer setter, String prompt) {
+    public IntProperty(String name, IntSupplier getter, IntConsumer setter, int min, int max, String prompt) {
         super(name);
         this.getter = getter;
         this.setter = setter;
+        this.min = min;
+        this.max = max;
         this.prompt = prompt;
     }
 
+    public int getMin() {
+        return min;
+    }
+
+    public int getMax() {
+        return max;
+    }
+
     @Override public Integer getValue() { return getter.getAsInt(); }
-    @Override public void setValue(Integer value) { if (value != null) setter.accept(value); }
+    @Override public void setValue(Integer value) { 
+        if (value != null) {
+            setter.accept(Math.max(min, Math.min(max, value)));
+        }
+    }
 
     @Override
     public boolean parseString(String newValue) {
