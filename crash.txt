@@ -1,0 +1,290 @@
+OpenJDK 64-Bit Server VM warning: Option CreateMinidumpOnCrash was deprecated in version 9.0 and will likely be removed in a future release. Use option CreateCoredumpOnCrash instead.
+[10:44:48] [main/INFO] [net.weavemc.loader.impl.bootstrap.AgentKt]: Attached Weave
+[10:44:48] [main/INFO] [net.weavemc.loader.impl.util.FileManager]: Discovered 1 mod files
+[10:44:48] [main/INFO] [net.weavemc.loader.impl.util.MappingsHandler]: Loading merged mappings for 1.8.9
+[10:44:48] [main/INFO] [net.weavemc.loader.impl.util.MappingsHandler]: Took 123ms to load mappings
+[10:44:49] [main/INFO] [net.weavemc.loader.impl.bootstrap.AgentKt]: Calling tweakers
+[10:44:49] [Genesis/main/INFO] Found external file: OptiFine_v1_8.jar
+[10:44:49] [Genesis/main/INFO] Found external file: tier-tagger.json
+[10:44:49] [Genesis/main/INFO] Found external file: waypoint-patterns.json
+[10:44:49] [Genesis/main/INFO] Found external file: vanilla_capes.json
+[10:44:49] [Genesis/main/INFO] Found external file: user-message-patterns.json
+[10:44:49] [Genesis/main/INFO] Found external file: kill-sound-chat-patterns.json
+[10:44:49] [Genesis/main/INFO] Found external file: hypixel/teamview.json
+[10:44:49] [Genesis/main/INFO] Found external file: hypixel/quickplay.json
+[10:44:49] [Genesis/main/INFO] Found external file: hypixel/bedwars.json
+[10:44:49] [Genesis/main/INFO] Found external file: hypixel/skyblock/mineshaft-corpse-waypoints.json
+[10:44:49] [Genesis/main/INFO] Found external file: hypixel/skyblock/middle-click.json
+[10:44:49] [Genesis/main/INFO] Found external file: hypixel/skyblock/item-abilities.json
+[10:44:49] [Genesis/main/INFO] Found external file: hypixel/skyblock/chocolate-factory-prices.json
+[10:44:49] [Genesis/main/INFO] Found external file: hypixel/skyblock/glacite-tunnels.json
+[10:44:49] [Genesis/main/INFO] Found external file: hypixel/skyblock/garden.json
+[10:44:49] [Genesis/main/INFO] Found external file: hypixel/skyblock/metal-detector-locations.json
+[10:44:49] [Genesis/main/INFO] Found external file: hypixel/skyblock/hoppity-eggs.json
+[10:44:49] [Genesis/main/INFO] Found external file: hypixel/skyblock/commands.json
+[10:44:49] [Genesis/main/INFO] Found external file: hypixel/skyblock/kuudra-waypoints.json
+[10:44:49] [Genesis/main/INFO] Found external file: hypixel/skyblock/sphinx-key.json
+[10:44:49] [Genesis/main/INFO] Found external file: hypixel/skyblock/skill-xp.json
+[10:44:49] [Genesis/main/INFO] Found external file: hypixel/skyblock/important-items.json
+[10:44:49] [Genesis/main/INFO] Found external file: hypixel/skyblock/important-npc-locations.json
+[10:44:49] [Genesis/main/INFO] Found external file: hypixel/skyblock/max-levels.json
+[10:44:49] [Genesis/main/INFO] Found external file: hypixel/skyblock/adblock-websites.json
+[10:44:49] [Genesis/main/INFO] Found external file: hypixel/skyblock/enchants.json
+[10:44:49] [Genesis/main/INFO] Found external file: hypixel/skyblock/tab-widgets.json
+[10:44:49] [Genesis/main/INFO] Found external file: hypixel/skyblock/item-shop-prices.json
+[10:44:49] [Genesis/main/INFO] Found external file: hypixel/skyblock/autocomplete-warps.json
+[10:44:49] [Genesis/main/INFO] Found external file: hypixel/skyblock/splits.json
+[10:44:49] [Genesis/main/INFO] Found external file: hypixel/skyblock/vendor-items.json
+[10:44:49] [Genesis/main/INFO] Found external file: hypixel/skyblock/dungeon/trash-items.json
+[10:44:49] [Genesis/main/INFO] Found external file: hypixel/skyblock/dungeon/routes.json
+[10:44:49] [Genesis/main/INFO] Found external file: hypixel/skyblock/dungeon/waterboard-solutions.json
+[10:44:49] [Genesis/main/INFO] Found external file: hypixel/skyblock/dungeon/quiz-key.json
+[10:44:49] [Genesis/main/INFO] Found external file: hypixel/skyblock/dungeon/rooms.json
+[10:44:49] [Genesis/main/INFO] Found classpath URL: common-0.1.0-SNAPSHOT-all-nomappings.jar with checksum cff923c1
+[10:44:49] [Genesis/main/INFO] Found classpath URL: lunar-platform-mappings-v1_8.jar with checksum d76fe8ab
+[10:44:49] [Genesis/main/INFO] Found classpath URL: optifine-0.1.0-SNAPSHOT-all.jar with checksum 80056136
+[10:44:49] [Genesis/main/INFO] Found classpath URL: genesis-0.1.0-SNAPSHOT-all.jar with checksum a44863a2
+[10:44:49] [Genesis/main/INFO] Found classpath URL: legacy-0.1.0-SNAPSHOT-all-nomappings.jar with checksum bfd3222f
+[10:44:49] [Genesis/main/INFO] Found classpath URL: lunar-lang.jar with checksum 2480592c
+[10:44:49] [Genesis/main/INFO] Found classpath URL: lunar.jar with checksum a93551a6
+[10:44:49] [Genesis/GameBootstrap/main/INFO] Launching Minecraft 1.8.9 v1_8 (parsed from 1.8.9)
+LUNARCLIENT_STATUS_PREINIT
+[10:44:50] [Genesis/GameBootstrap/main/INFO] Starting game!
+[10:44:50] [Genesis/GameBootstrap/main/INFO] Branch: master
+[10:44:50] [Genesis/GameBootstrap/main/INFO] Commit Hash: 704162f82abee90e823d80466fec54276db68aa2
+[10:44:50] [IchorPipeline/main/WARN] MappingSet for com.moonsworth.lunar.RIRCHCIOCIOOHRICRRHCROCRHCRIRO.ORCCIHIRCORIHCOHCHRHRIOOCORCRC.CRCIOOCHOHRRIORCOIICCHOCOROIHO.ORHCIHCIRORCIIHHROROOCOOCCCCHH has 0 field mappings.
+[10:44:51] [IchorPipeline/main/INFO] Built mapping set for com.moonsworth.lunar.ichor.RRCRCCCICCOIHICCROROIIROROHHII.ORCCIHIRCORIHCOHCHRHRIOOCORCRC.CICCOROOIHORRCCIHCHHCRROOOHCRR$ORCCIHIRCORIHCOHCHRHRIOOCORCRC.RHOORHCHICOHROHRHOIIIIOOIRCHHH 892ms on thread main
+[10:44:51] [IchorPipeline/main/INFO] Loading Mixin runtime for META_MIXIN
+[10:44:51] [Ichor/mixin(META_MIXIN)/INFO] SpongePowered MIXIN Subsystem Version=0.8.7 Source=jar:file:/C:/Users/23521/.lunarclient/offline/multiver/genesis-0.1.0-SNAPSHOT-all.jar!/org/spongepowered/asm/mixin/MixinEnvironment.class Service=Ichor Env=CLIENT
+[10:44:51] [Genesis/IchorMixinService/main/INFO] Making file system for jar:file:/C:/Users/23521/.lunarclient/offline/multiver/genesis-0.1.0-SNAPSHOT-all.jar!/com/moonsworth/lunar/ichor/CICCOROOIHORRCCIHCHHCRROOOHCRR/CICRIIOOCRCIROHCRCCCICIIIIIRRR/RRCRCCCICCOIHICCROROIIROROHHII.class
+[10:44:51] [Genesis/IchorMixinService/main/INFO] Initializing MixinExtras 0.5.0 in IchorClassLoader(META_MIXIN)
+[10:44:51] [IchorPipeline/main/INFO] Loading Mixin runtime for MIXIN
+[10:44:51] [Ichor/mixin(MIXIN)/INFO] SpongePowered MIXIN Subsystem Version=0.8.7 Source=jar:file:/C:/Users/23521/.lunarclient/offline/multiver/genesis-0.1.0-SNAPSHOT-all.jar!/org/spongepowered/asm/mixin/MixinEnvironment.class Service=Ichor Env=CLIENT
+[10:44:52] [Genesis/IchorMixinService/main/INFO] Initializing MixinExtras 0.5.0 in Genesis
+[10:44:52] [IchorPipeline/main/INFO] Done loading Mixin runtimes in 729ms
+[10:44:52] [IchorPipeline/main/INFO] Setting up mixins for META_MIXIN
+[10:44:52] [IchorPipeline/main/INFO] Setting up mixins for MIXIN
+[10:44:52] [Ichor/main/INFO] Mixin config mixins.legacy_optifine.json doesn't exist in Genesis
+[10:44:52] [Ichor/main/INFO] Mixin config mixins.legacy.json doesn't exist in Genesis
+[10:44:52] [Ichor/main/INFO] Mixin config mixins.legacy_lunar.json doesn't exist in Genesis
+[10:44:52] [IchorPipeline/main/INFO] Done registering Mixins in 130ms
+[10:44:52] [IchorPipeline/main/INFO] Going to default mixins stage for META_MIXIN
+[10:44:52] [IchorPipeline/main/INFO] Going to default mixins stage for MIXIN
+[10:44:55] [IchorPipeline/main/INFO] Mixin runtimes prepared in 3750ms
+[10:44:55] [IchorPipeline/main/INFO] Initialized Mixin in 4616ms
+[10:44:55] [Ichor/MixinExtras|Service(MIXIN)/INFO] Initializing MixinExtras via com.llamalad7.mixinextras.service.MixinExtrasServiceImpl(version=0.5.0).
+[10:44:56] [main/INFO] [net.weavemc.loader.impl.bootstrap.Bootstrap]: Bootstrapping Weave Loader...
+[10:44:56] [main/INFO] [net.weavemc.loader.impl.bootstrap.Bootstrap]: Bootstrapping complete, initializing loader...
+[10:44:56] [main/INFO] [net.weavemc.loader.impl.util.MappingsHandler]: Loading merged mappings for 1.8.9
+[10:44:56] [main/INFO] [net.weavemc.loader.impl.util.MappingsHandler]: Took 94ms to load mappings
+[10:44:56] [main/INFO] [net.weavemc.loader.impl.WeaveLoader]: Initializing Weave
+SLF4J(W): No SLF4J providers were found.
+SLF4J(W): Defaulting to no-operation (NOP) logger implementation
+SLF4J(W): See https://www.slf4j.org/codes.html#noProviders for further details.
+[10:44:56] [main/INFO] [mixin]: SpongePowered MIXIN Subsystem Version=0.8.5 Source=Unknown Service=Weave Mixin (within GenesisClassLoader(v1_8)) Env=CLIENT
+[10:44:57] [main/INFO] [mixin]: Compatibility level set to JAVA_8
+[10:44:57] [main/INFO] [mixin]: SpongePowered MIXIN Subsystem Version=0.8.5 Source=Unknown Service=Weave Mixin (within GenesisClassLoader(v1_8)) Env=CLIENT
+[10:44:57] [main/INFO] [mixin]: SpongePowered MIXIN Subsystem Version=0.8.5 Source=Unknown Service=Weave Mixin (within GenesisClassLoader(v1_8)) Env=CLIENT
+java.nio.file.FileSystemNotFoundException
+	at jdk.zipfs/jdk.nio.zipfs.ZipFileSystemProvider.getFileSystem(Unknown Source)
+	at jdk.zipfs/jdk.nio.zipfs.ZipFileSystemProvider.getPath(Unknown Source)
+	at java.base/java.nio.file.Path.of(Unknown Source)
+	at java.base/java.nio.file.Paths.get(Unknown Source)
+	at net.weavemc.loader.impl.shaded.spongepowered.asm.launch.platform.MainAttributes.getNioAttributes(MainAttributes.java:176)
+	at net.weavemc.loader.impl.shaded.spongepowered.asm.launch.platform.MainAttributes.getAttributes(MainAttributes.java:118)
+	at net.weavemc.loader.impl.shaded.spongepowered.asm.launch.platform.MainAttributes.<init>(MainAttributes.java:66)
+	at net.weavemc.loader.impl.shaded.spongepowered.asm.launch.platform.MainAttributes.of(MainAttributes.java:222)
+	at net.weavemc.loader.impl.shaded.spongepowered.asm.util.asm.ASM.getPackageVersion(ASM.java:219)
+	at net.weavemc.loader.impl.shaded.spongepowered.asm.util.asm.ASM.detectVersion(ASM.java:163)
+	at net.weavemc.loader.impl.shaded.spongepowered.asm.util.asm.ASM.<clinit>(ASM.java:57)
+	at net.weavemc.loader.impl.shaded.spongepowered.asm.mixin.transformer.MixinInfo$MixinClassNode.<init>(MixinInfo.java:166)
+	at net.weavemc.loader.impl.shaded.spongepowered.asm.mixin.transformer.MixinInfo$State.createClassNode(MixinInfo.java:309)
+	at net.weavemc.loader.impl.shaded.spongepowered.asm.mixin.transformer.MixinInfo$State.connect(MixinInfo.java:256)
+	at net.weavemc.loader.impl.shaded.spongepowered.asm.mixin.transformer.MixinInfo$State.<init>(MixinInfo.java:251)
+	at net.weavemc.loader.impl.shaded.spongepowered.asm.mixin.transformer.MixinInfo$State.<init>(MixinInfo.java:246)
+	at net.weavemc.loader.impl.shaded.spongepowered.asm.mixin.transformer.MixinInfo.<init>(MixinInfo.java:859)
+	at net.weavemc.loader.impl.shaded.spongepowered.asm.mixin.transformer.MixinConfig.prepareMixins(MixinConfig.java:852)
+	at net.weavemc.loader.impl.shaded.spongepowered.asm.mixin.transformer.MixinConfig.prepare(MixinConfig.java:777)
+	at net.weavemc.loader.impl.shaded.spongepowered.asm.mixin.transformer.MixinProcessor.prepareConfigs(MixinProcessor.java:540)
+	at net.weavemc.loader.impl.shaded.spongepowered.asm.mixin.transformer.MixinProcessor.select(MixinProcessor.java:462)
+	at net.weavemc.loader.impl.shaded.spongepowered.asm.mixin.transformer.MixinProcessor.checkSelect(MixinProcessor.java:438)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
+	at java.base/java.lang.reflect.Method.invoke(Unknown Source)
+	at net.weavemc.loader.impl.mixin.MixinAccessImpl.checkForcedSelect(MixinSandbox.kt:305)
+	at net.weavemc.loader.impl.mixin.MixinAccessImpl.findTargets(MixinSandbox.kt:315)
+	at Genesis//net.weavemc.loader.impl.mixin.SandboxedMixinState.findTargets(MixinSandbox.kt)
+	at Genesis//net.weavemc.loader.impl.WeaveLoader.populateMixinModifiers(WeaveLoader.kt:285)
+	at Genesis//net.weavemc.loader.impl.WeaveLoader.finalize(WeaveLoader.kt:194)
+	at Genesis//net.weavemc.loader.impl.WeaveLoader.<init>(WeaveLoader.kt:111)
+	at java.base/jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
+	at java.base/jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance(Unknown Source)
+	at java.base/jdk.internal.reflect.DelegatingConstructorAccessorImpl.newInstance(Unknown Source)
+	at java.base/java.lang.reflect.Constructor.newInstanceWithCaller(Unknown Source)
+	at java.base/java.lang.reflect.Constructor.newInstance(Unknown Source)
+	at net.weavemc.loader.impl.bootstrap.Bootstrap$bootstrap$1.transform(Bootstrap.kt:46)
+	at net.weavemc.loader.impl.bootstrap.transformer.SafeTransformer.transform(SafeTransformer.kt:27)
+	at java.instrument/java.lang.instrument.ClassFileTransformer.transform(Unknown Source)
+	at java.instrument/sun.instrument.TransformerManager.transform(Unknown Source)
+	at java.instrument/sun.instrument.InstrumentationImpl.transform(Unknown Source)
+	at java.base/java.lang.ClassLoader.defineClass1(Native Method)
+	at java.base/java.lang.ClassLoader.defineClass(Unknown Source)
+	at com.moonsworth.lunar.genesis.RRCRCCCICCOIHICCROROIIROROHHII.findClass(Unknown Source)
+	at com.moonsworth.lunar.genesis.RRCRCCCICCOIHICCROROIIROROHHII.loadClass(Unknown Source)
+	at java.base/java.lang.ClassLoader.loadClass(Unknown Source)
+	at java.base/java.lang.Class.forName0(Native Method)
+	at java.base/java.lang.Class.forName(Unknown Source)
+	at com.moonsworth.lunar.genesis.ClientGameBootstrap.apply(Unknown Source)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
+	at java.base/java.lang.reflect.Method.invoke(Unknown Source)
+	at com.moonsworth.lunar.genesis.CICRIIOOCRCIROHCRCCCICIIIIIRRR.CICRIIOOCRCIROHCRCCCICIIIIIRRR(Unknown Source)
+	at com.moonsworth.lunar.genesis.Genesis.run(Unknown Source)
+	at com.moonsworth.lunar.genesis.Genesis.main(Unknown Source)
+This message is printed before Minecraft initialises
+[10:44:57] [main/INFO] [net.weavemc.loader.impl.WeaveLoader]: Weave initialized in 867ms
+Hello from LC-HAX!
+[10:44:57] [Ichor/mixin(MIXIN)/WARN] Method overwrite conflict for bridge$isMouseButtonDown in mixins.legacy_lunar_combined.json:ORCCIHIRCORIHCOHCHRHRIOOCORCRC from mod (unknown), previously written by com.moonsworth.lunar.legacy.CRCIOOCHOHRRIORCOIICCHOCOROIHO.RRCRCCCICCOIHICCROROIIROROHHII.ORCCIHIRCORIHCOHCHRHRIOOCORCRC. Skipping method.
+onStartGame transformed
+[10:44:57] [Ichor/mixin(MIXIN)/WARN] Method overwrite conflict for bridge$getCapeLocation in mixins.legacy_bridge_combined.json:RRCRCCCICCOIHICCROROIIROROHHII.CICRIIOOCRCIROHCRCCCICIIIIIRRR.ORCCIHIRCORIHCOHCHRHRIOOCORCRC from mod (unknown), previously written by com.moonsworth.lunar.legacy.optifine.mixin.ORCCIHIRCORIHCOHCHRHRIOOCORCRC. Skipping method.
+ERROR StatusConsoleListener Error processing element Queue ([Appenders: null]): CLASS_NOT_FOUND
+ERROR StatusConsoleListener Error processing element Listener ([Appenders: null]): CLASS_NOT_FOUND
+ERROR StatusConsoleListener Unable to locate appender "ServerGuiConsole" for logger config "root"
+ERROR StatusConsoleListener Unable to locate appender "Tracy" for logger config "root"
+[10:44:58] [ConfigIO-Thread/INFO]: Successfully loaded profile: default
+[10:44:58] [main/INFO]: [STDOUT]: [Bridge] Setting Bridge Implementation to com.moonsworth.lunar.legacy.ORCCIHIRCORIHCOHCHRHRIOOCORCRC
+[10:44:59] [main/INFO]: [STDOUT]: [Bridge] Found textures dir: C:\Users\23521\.lunarclient\textures
+[10:44:59] [main/INFO]: [STDOUT]: [Bridge] Found JIT dir: C:\Users\23521\.lunarclient\jit
+[10:44:59] [main/INFO]: [STDOUT]: [Bridge] Found IPC port: 28190
+[10:44:59] [main/INFO]: [STDOUT]: [Bridge] Found ui dir: C:\Users\23521\.lunarclient\ui\1766462e95afef5bb916a582c4e6df1f285eba66
+[10:44:59] [main/INFO]: [STDOUT]: [Bridge] Found webosr dir: C:\Users\23521\.lunarclient\offline\multiver\natives
+[10:44:59] [main/INFO]: [STDOUT]: Completely ignored arguments: [--xuid, 2535472497193903, --ichorExternalFiles, OptiFine_v1_8.jar,tier-tagger.json,waypoint-patterns.json,vanilla_capes.json,user-message-patterns.json,kill-sound-chat-patterns.json,hypixel/teamview.json,hypixel/quickplay.json,hypixel/bedwars.json,hypixel/skyblock/mineshaft-corpse-waypoints.json,hypixel/skyblock/middle-click.json,hypixel/skyblock/item-abilities.json,hypixel/skyblock/chocolate-factory-prices.json,hypixel/skyblock/glacite-tunnels.json,hypixel/skyblock/garden.json,hypixel/skyblock/metal-detector-locations.json,hypixel/skyblock/hoppity-eggs.json,hypixel/skyblock/commands.json,hypixel/skyblock/kuudra-waypoints.json,hypixel/skyblock/sphinx-key.json,hypixel/skyblock/skill-xp.json,hypixel/skyblock/important-items.json,hypixel/skyblock/important-npc-locations.json,hypixel/skyblock/max-levels.json,hypixel/skyblock/adblock-websites.json,hypixel/skyblock/enchants.json,hypixel/skyblock/tab-widgets.json,hypixel/skyblock/item-shop-prices.json,hypixel/skyblock/autocomplete-warps.json,hypixel/skyblock/splits.json,hypixel/skyblock/vendor-items.json,hypixel/skyblock/dungeon/trash-items.json,hypixel/skyblock/dungeon/routes.json,hypixel/skyblock/dungeon/waterboard-solutions.json,hypixel/skyblock/dungeon/quiz-key.json,hypixel/skyblock/dungeon/rooms.json, --ichorClassPath, common-0.1.0-SNAPSHOT-all-nomappings.jar,lunar-platform-mappings-v1_8.jar,optifine-0.1.0-SNAPSHOT-all.jar,genesis-0.1.0-SNAPSHOT-all.jar,legacy-0.1.0-SNAPSHOT-all-nomappings.jar,lunar-lang.jar,lunar.jar, --workingDirectory, ., --classpathDir, .]
+[10:44:59] [Client thread/INFO]: Setting user: GottaHaveU
+[10:44:59] [Client thread/INFO]: [STDOUT]: [Bridge] Setting Minecraft Client instance to net.minecraft.client.Minecraft
+[10:44:59] [Client thread/INFO]: [STDOUT]: Mixin Test
+[10:44:59] [Client thread/INFO]: [STDOUT]: Hook Test
+[10:44:59] [Client thread/INFO]: [STDOUT]: [Bridge] Using OptiFine wrapper
+[10:44:59] [Client thread/INFO]: [STDOUT]: [Bridge] Adding cosmetic pack to the default resource packs
+[10:44:59] [Client thread/INFO]: [STDOUT]: [Bridge] Adding cosmetic pack to the default resource packs
+[10:44:59] [Client thread/INFO]: [OptiFine] *** Reflector Forge ***
+[10:44:59] [Client thread/INFO]: [STDOUT]: [10:44:59] [Ichor/mixin(MIXIN)/WARN] Method overwrite conflict for bridge$getBiomeName in mixins.legacy_bridge_v1_8.json:ORCCIHIRCORIHCOHCHRHRIOOCORCRC.ORCCIHIRCORIHCOHCHRHRIOOCORCRC.ORCCIHIRCORIHCOHCHRHRIOOCORCRC from mod (unknown), previously written by com.moonsworth.lunar.legacy.CRCIOOCHOHRRIORCOIICCHOCOROIHO.ORHCIHCIRORCIIHHROROOCOOCCCCHH.ORCCIHIRCORIHCOHCHRHRIOOCORCRC.ORCCIHIRCORIHCOHCHRHRIOOCORCRC. Skipping method.
+
+[10:44:59] [Client thread/INFO]: [STDOUT]: [10:44:59] [Ichor/mixin(MIXIN)/WARN] Method overwrite conflict for bridge$getBiomeID in mixins.legacy_bridge_v1_8.json:ORCCIHIRCORIHCOHCHRHRIOOCORCRC.ORCCIHIRCORIHCOHCHRHRIOOCORCRC.ORCCIHIRCORIHCOHCHRHRIOOCORCRC from mod (unknown), previously written by com.moonsworth.lunar.legacy.CRCIOOCHOHRRIORCOIICCHOCOROIHO.ORHCIHCIRORCIIHHROROOCOOCCCCHH.ORCCIHIRCORIHCOHCHRHRIOOCORCRC.ORCCIHIRCORIHCOHCHRHRIOOCORCRC. Skipping method.
+
+[10:44:59] [Client thread/INFO]: [STDOUT]: [10:44:59] [Ichor/mixin(MIXIN)/WARN] Method overwrite conflict for bridge$getTemperature in mixins.legacy_bridge_v1_8.json:ORCCIHIRCORIHCOHCHRHRIOOCORCRC.ORCCIHIRCORIHCOHCHRHRIOOCORCRC.ORCCIHIRCORIHCOHCHRHRIOOCORCRC from mod (unknown), previously written by com.moonsworth.lunar.legacy.CRCIOOCHOHRRIORCOIICCHOCOROIHO.ORHCIHCIRORCIIHHROROOCOOCCCCHH.ORCCIHIRCORIHCOHCHRHRIOOCORCRC.ORCCIHIRCORIHCOHCHRHRIOOCORCRC. Skipping method.
+
+[10:44:59] [Client thread/INFO]: [OptiFine] *** Reflector Vanilla ***
+[10:44:59] [Client thread/INFO]: [LC] ==============================
+[10:44:59] [Client thread/INFO]: [LC] MC version: 1.8.9
+[10:44:59] [Client thread/INFO]: [LC] Branch: master
+[10:44:59] [Client thread/INFO]: [LC] Commit: 704162f82abee90e823d80466fec54276db68aa2 (704162f)
+[10:44:59] [Client thread/INFO]: [LC] Modules: [lunar-platform, common, optifine, lunar]
+[10:44:59] [Client thread/INFO]: [LC] OS: Windows 11
+[10:44:59] [Client thread/INFO]: [LC] Arch: AMD64
+[10:44:59] [Client thread/INFO]: [LC] Launcher Version: 3.6.1-ow
+[10:44:59] [Client thread/INFO]: [LC] Launcher ID: 4a0291df-5a84-4745-ba5f-f497e29bb896
+[10:44:59] [Client thread/INFO]: [LC] Overwolf MUID: e71b82db-fbbf-4e39-956b-789df1e44621
+[10:44:59] [Client thread/INFO]: [LC] Launch ID: 612bd889-755e-46db-8095-cc7445532970
+[10:44:59] [Client thread/INFO]: [LC] Sentry Trace ID: e1a32334782e7481c67166b0aa6ab3b8
+[10:44:59] [Client thread/INFO]: [LC] ==============================
+---- Minecraft Crash Report ----
+// Don't be sad, have a hug! <3
+
+Time: 2026-03-28 10:45
+Description: Initializing game
+
+java.lang.RuntimeException: java.util.concurrent.ExecutionException: java.lang.ExceptionInInitializerError
+	at Genesis//net.minecraft.client.Minecraft.handler_lunar$waitForAsyncBootstrap(SourceFile:6702)
+	at Genesis//net.minecraft.client.Minecraft.startGame(SourceFile)
+	at Genesis//net.minecraft.client.Minecraft.run(SourceFile:310)
+	at Genesis//net.minecraft.client.main.Main.main(SourceFile:124)
+	at java.base@17.0.3/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base@17.0.3/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
+	at java.base@17.0.3/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
+	at java.base@17.0.3/java.lang.reflect.Method.invoke(Unknown Source)
+	at com.moonsworth.lunar.genesis.ClientGameBootstrap.apply(Unknown Source)
+	at java.base@17.0.3/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base@17.0.3/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
+	at java.base@17.0.3/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
+	at java.base@17.0.3/java.lang.reflect.Method.invoke(Unknown Source)
+	at app//com.moonsworth.lunar.genesis.CICRIIOOCRCIROHCRCCCICIIIIIRRR.CICRIIOOCRCIROHCRCCCICIIIIIRRR(Unknown Source)
+	at app//com.moonsworth.lunar.genesis.Genesis.run(Unknown Source)
+	at app//com.moonsworth.lunar.genesis.Genesis.main(Unknown Source)
+Caused by: java.util.concurrent.ExecutionException: java.lang.ExceptionInInitializerError
+	at java.base/java.util.concurrent.CompletableFuture.reportGet(Unknown Source)
+	at java.base/java.util.concurrent.CompletableFuture.get(Unknown Source)
+	at Genesis//net.minecraft.client.Minecraft.handler$zgf000$lunar$waitForAsyncBootstrap(SourceFile:6700)
+	... 15 more
+Caused by: java.lang.ExceptionInInitializerError
+	at Genesis//net.minecraft.util.EnumFacing.<clinit>(EnumFacing.java:12)
+	at Genesis//net.minecraft.block.properties.PropertyDirection.create(SourceFile:21)
+	at Genesis//net.minecraft.block.properties.PropertyDirection.create(SourceFile:17)
+	at Genesis//net.minecraft.block.BlockDispenser.<clinit>(SourceFile:27)
+	at Genesis//net.minecraft.block.Block.registerBlocks(SourceFile:966)
+	at Genesis//net.minecraft.init.Bootstrap.register(SourceFile:456)
+	at java.base/java.util.concurrent.CompletableFuture$AsyncRun.run(Unknown Source)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+	at java.base/java.lang.Thread.run(Unknown Source)
+Caused by: java.lang.NullPointerException: Cannot invoke "com.moonsworth.lunar.CICRIIOOCRCIROHCRCCCICIIIIIRRR.ORCCIHIRCORIHCOHCHRHRIOOCORCRC.ORCCIHIRCORIHCOHCHRHRIOOCORCRC(int, int, int)" because the return value of "com.moonsworth.lunar.CICRIIOOCRCIROHCRCCCICIIIIIRRR.CICRIIOOCRCIROHCRCCCICIIIIIRRR.ORIHIHOHCOIIOOCRCHIHRCRHRCRIIO()" is null
+	at Genesis//com.moonsworth.lunar.CICRIIOOCRCIROHCRCCCICIIIIIRRR.HIOIIRCHCCOIOCIOOHHHOOICHROIHR.ROOROCCCIIIRHHCHIRIICHHHIHRCII.<clinit>(Unknown Source)
+	... 10 more
+
+
+A detailed walkthrough of the error, its code path and all known details is as follows:
+---------------------------------------------------------------------------------------
+
+-- Head --
+Stacktrace:
+	at Genesis//net.minecraft.client.Minecraft.handler$zgf000$lunar$waitForAsyncBootstrap(SourceFile:6702)
+	at Genesis//net.minecraft.client.Minecraft.startGame(SourceFile)
+
+-- Initialization --
+Details:
+Stacktrace:
+	at Genesis//net.minecraft.client.Minecraft.run(SourceFile:310)
+	at Genesis//net.minecraft.client.main.Main.main(SourceFile:124)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
+	at java.base/java.lang.reflect.Method.invoke(Unknown Source)
+	at com.moonsworth.lunar.genesis.ClientGameBootstrap.apply(Unknown Source)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
+	at java.base/java.lang.reflect.Method.invoke(Unknown Source)
+	at com.moonsworth.lunar.genesis.CICRIIOOCRCIROHCRCCCICIIIIIRRR.CICRIIOOCRCIROHCRCCCICIIIIIRRR(Unknown Source)
+	at com.moonsworth.lunar.genesis.Genesis.run(Unknown Source)
+	at com.moonsworth.lunar.genesis.Genesis.main(Unknown Source)
+
+-- System Details --
+Details:
+	Minecraft Version: 1.8.9
+	Operating System: Windows 11 (amd64) version 10.0
+	Java Version: 17.0.3, Azul Systems, Inc.
+	Java VM Version: OpenJDK 64-Bit Server VM (mixed mode, sharing), Azul Systems, Inc.
+	Memory: 456103424 bytes (434 MB) / 1400897536 bytes (1336 MB) up to 8589934592 bytes (8192 MB)
+	JVM Flags: 5 total; -XX:+UseStringDeduplication -Xmx8192m -XX:+DisableAttachMechanism -XX:-CreateCoredumpOnCrash -XX:-CreateMinidumpOnCrash
+	IntCache: cache: 0, tcache: 0, allocated: 0, tallocated: 0
+	Launched Version: 1.8.9
+	LWJGL: 2.9.4
+	OpenGL: ~~ERROR~~ RuntimeException: No OpenGL context found in the current thread.
+	GL Caps: 
+	Using VBOs: ~~ERROR~~ NullPointerException: Cannot read field "useVbo" because "this.field_82887_a.gameSettings" is null
+	Is Modded: Definitely; Client brand changed to 'lunarclient:v2.21.33-2612'
+	Type: Client (map_client.txt)
+	Resource Packs: ~~ERROR~~ NullPointerException: Cannot read field "resourcePacks" because "this.field_90048_a.gameSettings" is null
+	Current Language: ~~ERROR~~ NullPointerException: Cannot invoke "net.minecraft.client.resources.LanguageManager.getCurrentLanguage()" because the return value of "net.minecraft.client.Minecraft.access$100(net.minecraft.client.Minecraft)" is null
+	Profiler Position: N/A (disabled)
+	CPU: <unknown>
+	OptiFine Version: OptiFine_1.8.9_HD_U_M6_pre2
+	OptiFine Build: 20211101-204933
+	Shaders: null
+	OpenGlVersion: null
+	OpenGlRenderer: null
+	OpenGlVendor: null
+	CpuCount: 0
+#@!@# Game crashed! Crash report saved to: #@!@# C:\Users\23521\AppData\Roaming\.minecraft\crash-reports\crash-2026-03-28_10.45.04-client.txt
+[10:45:04] [Client Shutdown Thread/INFO]: Stopping server

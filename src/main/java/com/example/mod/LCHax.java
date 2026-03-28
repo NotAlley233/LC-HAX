@@ -6,6 +6,7 @@ import com.example.mod.command.commands.ListCommand;
 import com.example.mod.command.commands.ModuleCommand;
 import com.example.mod.command.commands.PrefixCommand;
 import com.example.mod.command.commands.ToggleCommand;
+import com.example.mod.command.commands.AntiCheatInfoCommand;
 import com.example.mod.config.ConfigManager;
 import com.example.mod.config.ConfigStore;
 import com.example.mod.core.ModLogger;
@@ -14,10 +15,12 @@ import com.example.mod.module.KeyBindingManager;
 import com.example.mod.module.Module;
 import com.example.mod.module.ModuleManager;
 import com.example.mod.module.modules.AutoClicker;
-import com.example.mod.module.modules.RightClicker;
+import com.example.mod.module.modules.Cape;
 import com.example.mod.module.modules.ClickGUIModule;
 import com.example.mod.module.modules.PrefixModule;
+import com.example.mod.module.modules.RightClicker;
 import com.example.mod.module.modules.advanced.AntiBot;
+import com.example.mod.module.modules.advanced.AntiCheat;
 import com.example.mod.module.modules.advanced.Eagle;
 import com.example.mod.module.modules.advanced.NoHitDelay;
 import com.example.mod.module.modules.bedwars.BedTracker;
@@ -46,13 +49,16 @@ public class LCHax implements ModInitializer {
         EventBus.subscribe(new RenderGameOverlayEventListener());
 
         ModuleManager moduleManager = new ModuleManager();
+        AntiCheat antiCheatModule = new AntiCheat();
         moduleManager.register(new PrefixModule(true));
         moduleManager.register(new AutoClicker());
         moduleManager.register(new RightClicker());
+        moduleManager.register(antiCheatModule);
         moduleManager.register(new AntiBot());
         moduleManager.register(new Eagle());
         moduleManager.register(new NoHitDelay());
         moduleManager.register(new BedTracker());
+        moduleManager.register(new Cape());
 
         Path configPath = ConfigStore.defaultConfigPath("lchax.json");
         ConfigStore configStore = new ConfigStore(configPath);
@@ -115,6 +121,22 @@ public class LCHax implements ModInitializer {
             );
         }
 
+        AntiCheat antiCheat = (AntiCheat) moduleManager.get("anticheat");
+        if (antiCheat != null) {
+            propertyManager.register(
+                    antiCheat,
+                    new BooleanProperty("enabled", antiCheat::enabled, antiCheat::setEnabled),
+                    new IntProperty("violationLevel", antiCheat::getViolationLevel, antiCheat::setViolationLevel, 1, 20),
+                    new BooleanProperty("detectAutoBlock", antiCheat::isDetectAutoBlock, antiCheat::setDetectAutoBlock),
+                    new BooleanProperty("detectNoSlow", antiCheat::isDetectNoSlow, antiCheat::setDetectNoSlow),
+                    new BooleanProperty("detectLegitScaffold", antiCheat::isDetectLegitScaffold, antiCheat::setDetectLegitScaffold),
+                    new BooleanProperty("detectKillaura", antiCheat::isDetectKillaura, antiCheat::setDetectKillaura),
+                    new BooleanProperty("flagPingSound", antiCheat::isFlagPingSound, antiCheat::setFlagPingSound),
+                    new BooleanProperty("flagWDRButton", antiCheat::isFlagWDRButton, antiCheat::setFlagWDRButton),
+                    new BooleanProperty("debugMessages", antiCheat::isDebugMessages, antiCheat::setDebugMessages)
+            );
+        }
+
         Eagle eagle = (Eagle) moduleManager.get("eagle");
         if (eagle != null) {
             propertyManager.register(
@@ -141,6 +163,20 @@ public class LCHax implements ModInitializer {
             );
         }
 
+        Cape cape = (Cape) moduleManager.get("cape");
+        if (cape != null) {
+            propertyManager.register(
+                    cape,
+                    new BooleanProperty("enabled", cape::enabled, cape::setEnabled),
+                    new ModeProperty(
+                            "selectedCape",
+                            cape::getSelectedCape,
+                            cape::setSelectedCape,
+                            Cape.CAPE_OPTIONS.toArray(new String[0])
+                    )
+            );
+        }
+
         configStore.loadInto(moduleManager, propertyManager);
 
         CommandManager commandManager = new CommandManager(moduleManager, configStore);
@@ -149,6 +185,7 @@ public class LCHax implements ModInitializer {
         commandManager.register(new ToggleCommand(moduleManager, configStore, propertyManager));
         commandManager.register(new PrefixCommand(configStore));
         commandManager.register(new ModuleCommand(moduleManager, propertyManager, ""));
+        commandManager.register(new AntiCheatInfoCommand(antiCheatModule));
 
         ModContext.setCommandManager(commandManager);
         ModContext.setModuleManager(moduleManager);

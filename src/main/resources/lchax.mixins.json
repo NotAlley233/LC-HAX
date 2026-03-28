@@ -5,6 +5,8 @@
     "MinecraftMixin",
     "ChatCommandMixin",
     "MinecraftAccessor",
-    "NetHandlerPlayClientChatMixin"
+    "NetHandlerPlayClientChatMixin",
+    "AbstractClientPlayerCapeMixin",
+    "AbstractClientPlayerWearingCapeMixin"
   ]
 }
