@@ -1,6 +1,7 @@
 # LC-HAX
 
 Developer: NotAlley
+License: GPL-3.0
 
 ---
 

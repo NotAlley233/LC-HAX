@@ -98,9 +98,10 @@ public class ClickGuiScreen extends GuiScreen {
         if (progress <= 0) return;
 
         updateLayout();
-        int alpha = closing ? (int) (255 * progress) : 255;
+        int alpha = closing ? Math.max(0, (int) (255 * progress)) : 255;
+        float overlayAlpha = closing ? 0.55f * progress : 0.55f;
 
-        drawRect(0, 0, this.width, this.height, RenderUtil.applyOpacity(0xFF08080C, 0.55f * progress));
+        drawRect(0, 0, this.width, this.height, RenderUtil.applyOpacity(0xFF08080C, overlayAlpha));
 
         ShadowUtil.drawShadow(panelX, panelY, panelW, panelH,
                 MaterialTheme.CORNER_RADIUS_PANEL, 18f,
@@ -295,12 +296,7 @@ public class ClickGuiScreen extends GuiScreen {
                 searchFocused = false;
                 return;
             }
-            if (!closing) {
-                closing = true;
-                animationStart = System.currentTimeMillis();
-            } else {
-                mc.displayGuiScreen(null);
-            }
+            mc.displayGuiScreen(null);
             return;
         }
 
@@ -391,7 +387,8 @@ public class ClickGuiScreen extends GuiScreen {
         float eased = GuiAnimationUtil.easeOutCubic(t);
         if (closing) {
             float r = 1f - eased;
-            if (r <= 0.01f) {
+            if (r <= 0.03f) {
+                closing = false;
                 mc.displayGuiScreen(null);
                 return 0f;
             }
