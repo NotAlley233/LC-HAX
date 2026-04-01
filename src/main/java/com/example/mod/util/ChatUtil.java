@@ -32,7 +32,7 @@ public final class ChatUtil {
     }
 
     public static void error(String msg) {
-        send(prefix() + "§c" + msg);
+        send(prefix() + "§c" + msg + "§r");
     }
 
     public static void sendFormatted(String msg) {
@@ -41,12 +41,21 @@ public final class ChatUtil {
         send(msg.replace('&', SECTION));
     }
 
+    public static void sendPrefixedFormatted(String msg) {
+        if (msg == null) return;
+        sendFormatted(prefix() + msg);
+    }
+
+    public static String getPrefixString() {
+        return prefix();
+    }
+
     private static String prefix() {
         if (!prefixEnabled) return "";
         String p = prefixText;
         if (p == null || p.trim().isEmpty()) return "";
-        // Keep brackets uncolored; only the inner text is rainbow.
-        return "[" + RainbowUtil.rainbow(p) + "] ";
+        String inner = RainbowUtil.rainbowOffset(p, 1, false);
+        return "§f[" + inner + "§f] §r";
     }
 
     private static void send(String msg) {

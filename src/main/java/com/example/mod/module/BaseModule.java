@@ -1,5 +1,7 @@
 package com.example.mod.module;
 
+import com.example.mod.core.ToggleAnnouncements;
+import com.example.mod.util.ChatUtil;
 import net.weavemc.api.event.EventBus;
 
 public abstract class BaseModule implements Module {
@@ -42,7 +44,13 @@ public abstract class BaseModule implements Module {
         if (enabled) {
             EventBus.subscribe(this);
             onEnable();
+            if (ToggleAnnouncements.enabled()) {
+                ChatUtil.info(name + " (§aON§r)");
+            }
         } else {
+            if (ToggleAnnouncements.enabled()) {
+                ChatUtil.info(name + " (§cOFF§r)");
+            }
             EventBus.unsubscribe(this);
             onDisable();
         }

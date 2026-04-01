@@ -38,9 +38,9 @@ public class ConfigCommand implements Command {
                 String saveProfile = args.get(2);
                 configManager.save(saveProfile).whenComplete((v, ex) -> {
                     if (ex != null) {
-                        ChatUtil.error("Failed to save profile '&e" + saveProfile + "&c'. Check logs.");
+                        ChatUtil.sendPrefixedFormatted("&cFailed to save profile '&e" + saveProfile + "&c'. Check logs.&r");
                     } else {
-                        ChatUtil.sendFormatted("&aSuccessfully saved profile '&e" + saveProfile + "&a'.");
+                        ChatUtil.sendPrefixedFormatted("&aSuccessfully saved profile '&e" + saveProfile + "&a'.&r");
                     }
                 });
                 break;
@@ -54,14 +54,14 @@ public class ConfigCommand implements Command {
                 configManager.load(loadProfile).whenComplete((v, ex) -> {
                     if (ex != null) {
                         if (ex.getMessage() != null && ex.getMessage().contains("ERR_PROFILE_NOT_FOUND")) {
-                            ChatUtil.error("[ERROR] Profile '&e" + loadProfile + "&c' not found. (ERR_PROFILE_NOT_FOUND)");
+                            ChatUtil.sendPrefixedFormatted("&c[ERROR] Profile '&e" + loadProfile + "&c' not found. &7(ERR_PROFILE_NOT_FOUND)&r");
                         } else if (ex.getMessage() != null && ex.getMessage().contains("ERR_SCHEMA_VALIDATION_FAILED")) {
-                            ChatUtil.error("[ERROR] Profile '&e" + loadProfile + "&c' is corrupted or invalid. (ERR_SCHEMA_VALIDATION_FAILED)");
+                            ChatUtil.sendPrefixedFormatted("&c[ERROR] Profile '&e" + loadProfile + "&c' is corrupted or invalid. &7(ERR_SCHEMA_VALIDATION_FAILED)&r");
                         } else {
-                            ChatUtil.error("[ERROR] Failed to load profile '&e" + loadProfile + "&c'. (ERR_LOAD_FAILED)");
+                            ChatUtil.sendPrefixedFormatted("&c[ERROR] Failed to load profile '&e" + loadProfile + "&c'. &7(ERR_LOAD_FAILED)&r");
                         }
                     } else {
-                        ChatUtil.sendFormatted("&aSuccessfully loaded profile '&e" + loadProfile + "&a'.");
+                        ChatUtil.sendPrefixedFormatted("&aSuccessfully loaded profile '&e" + loadProfile + "&a'.&r");
                     }
                 });
                 break;
@@ -71,11 +71,11 @@ public class ConfigCommand implements Command {
                     if (ex != null) {
                         ChatUtil.error("Failed to list profiles.");
                     } else if (profiles.isEmpty()) {
-                        ChatUtil.sendFormatted("&eNo profiles found.");
+                        ChatUtil.sendPrefixedFormatted("&eNo profiles found.&r");
                     } else {
-                        ChatUtil.sendFormatted("&aAvailable Profiles:");
+                        ChatUtil.sendPrefixedFormatted("&aAvailable Profiles:&r");
                         for (String profile : profiles) {
-                            ChatUtil.sendFormatted("&7- &b" + profile);
+                            ChatUtil.sendPrefixedFormatted("&7- &b" + profile + "&r");
                         }
                     }
                 });
@@ -89,9 +89,9 @@ public class ConfigCommand implements Command {
                 String deleteProfile = args.get(2);
                 configManager.delete(deleteProfile).whenComplete((success, ex) -> {
                     if (ex != null || !success) {
-                        ChatUtil.error("Failed to delete profile '&e" + deleteProfile + "&c'.");
+                        ChatUtil.sendPrefixedFormatted("&cFailed to delete profile '&e" + deleteProfile + "&c'.&r");
                     } else {
-                        ChatUtil.sendFormatted("&aSuccessfully deleted profile '&e" + deleteProfile + "&a'.");
+                        ChatUtil.sendPrefixedFormatted("&aSuccessfully deleted profile '&e" + deleteProfile + "&a'.&r");
                     }
                 });
                 break;

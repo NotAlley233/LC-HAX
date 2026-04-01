@@ -38,13 +38,13 @@ public class BindCommand implements Command {
         if (actionOrModule.equalsIgnoreCase("-l")) {
             Map<String, Integer> bindings = keyBindingManager.getAllBindings();
             if (bindings.isEmpty()) {
-                ChatUtil.sendFormatted("&eNo keybindings found.");
+                ChatUtil.sendPrefixedFormatted("&eNo keybindings found.&r");
                 return;
             }
-            ChatUtil.sendFormatted("&aCurrent Keybindings:");
+            ChatUtil.sendPrefixedFormatted("&aCurrent Keybindings:&r");
             for (Map.Entry<String, Integer> entry : bindings.entrySet()) {
                 String keyName = Keyboard.getKeyName(entry.getValue());
-                ChatUtil.sendFormatted(String.format("&7- &b%s&7: &e%s", entry.getKey(), keyName));
+                ChatUtil.sendPrefixedFormatted(String.format("&7- &b%s&7: &e%s&r", entry.getKey(), keyName));
             }
             return;
         }
@@ -56,9 +56,9 @@ public class BindCommand implements Command {
             }
             String moduleName = args.get(2);
             if (keyBindingManager.unbind(moduleName)) {
-                ChatUtil.sendFormatted("&aUnbound module &e" + moduleName + "&a.");
+                ChatUtil.sendPrefixedFormatted("&aUnbound module &e" + moduleName + "&a.&r");
             } else {
-                ChatUtil.error("Module &e" + moduleName + "&c is not bound to any key.");
+                ChatUtil.sendPrefixedFormatted("&cModule &e" + moduleName + "&c is not bound to any key.&r");
             }
             return;
         }
@@ -87,12 +87,12 @@ public class BindCommand implements Command {
 
         String existingModule = keyBindingManager.getBoundModule(keyCode);
         if (existingModule != null && !existingModule.equalsIgnoreCase(moduleName) && !force) {
-            ChatUtil.error("Key &e" + keyName + "&c is already bound to &e" + existingModule + "&c.");
-            ChatUtil.error("Use &e.bind " + moduleName + " " + keyName + " -f&c to override.");
+            ChatUtil.sendPrefixedFormatted("&cKey &e" + keyName + "&c is already bound to &e" + existingModule + "&c.&r");
+            ChatUtil.sendPrefixedFormatted("&cUse &e.bind " + moduleName + " " + keyName + " -f&c to override.&r");
             return;
         }
 
         keyBindingManager.bind(moduleName, keyCode, true);
-        ChatUtil.sendFormatted("&aBound &e" + m.name() + "&a to key &e" + keyName + "&a.");
+        ChatUtil.sendPrefixedFormatted("&aBound &e" + m.name() + "&a to key &e" + keyName + "&a.&r");
     }
 }

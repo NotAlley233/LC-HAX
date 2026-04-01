@@ -4,6 +4,7 @@ import com.example.mod.module.Module;
 import com.example.mod.module.ModuleManager;
 import com.example.mod.property.PropertyManager;
 import com.example.mod.property.Property;
+import com.example.mod.core.ToggleAnnouncements;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
@@ -34,30 +35,35 @@ public class ConfigStore {
     }
 
     public void loadInto(ModuleManager moduleManager, PropertyManager propertyManager) {
-        for (Module m : moduleManager.all()) {
-            String moduleKey = m.name();
-            if (configObj.has(moduleKey)) {
-                JsonObject modJson = configObj.getAsJsonObject(moduleKey);
-                
-                // Load Module Enabled State
-                if (modJson.has("enabled")) {
-                    m.setEnabled(modJson.get("enabled").getAsBoolean());
-                }
-
-                // Load properties
-                if (propertyManager.getProperties(m) != null) {
-                    for (Property<?> prop : propertyManager.getProperties(m)) {
-                        if (modJson.has(prop.getName())) {
-                            try {
-                                String valStr = modJson.get(prop.getName()).getAsString();
-                                prop.parseString(valStr);
-                            } catch (Exception e) {
-                                ModLogger.error("Failed to parse property " + prop.getName() + " for module " + m.name(), e);
+        ToggleAnnouncements.pushSilent();
+        try {
+            for (Module m : moduleManager.all()) {
+                String moduleKey = m.name();
+                if (configObj.has(moduleKey)) {
+                    JsonObject modJson = configObj.getAsJsonObject(moduleKey);
+                    
+                    // Load Module Enabled State
+                    if (modJson.has("enabled")) {
+                        m.setEnabled(modJson.get("enabled").getAsBoolean());
+                    }
+    
+                    // Load properties
+                    if (propertyManager.getProperties(m) != null) {
+                        for (Property<?> prop : propertyManager.getProperties(m)) {
+                            if (modJson.has(prop.getName())) {
+                                try {
+                                    String valStr = modJson.get(prop.getName()).getAsString();
+                                    prop.parseString(valStr);
+                                } catch (Exception e) {
+                                    ModLogger.error("Failed to parse property " + prop.getName() + " for module " + m.name(), e);
+                                }
                             }
                         }
                     }
                 }
             }
+        } finally {
+            ToggleAnnouncements.popSilent();
         }
     }
 

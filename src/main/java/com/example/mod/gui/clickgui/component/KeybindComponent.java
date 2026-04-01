@@ -21,6 +21,10 @@ public class KeybindComponent extends UiComponent {
         this.setter = setter;
     }
 
+    public boolean isBinding() {
+        return binding;
+    }
+
     @Override
     public void draw(int mouseX, int mouseY, float partialTicks, int scrollOffset, float alphaProgress) {
         float ry = y - scrollOffset;
@@ -33,12 +37,21 @@ public class KeybindComponent extends UiComponent {
             int key = Math.max(0, getter.get());
             value = key == Keyboard.KEY_NONE ? "None" : Keyboard.getKeyName(key);
         }
+
         int titleColor = MaterialTheme.getRGBWithAlpha(MaterialTheme.TEXT_COLOR, alpha);
         int valueColor = binding
                 ? MaterialTheme.getRGBWithAlpha(MaterialTheme.PRIMARY_COLOR, alpha)
                 : MaterialTheme.getRGBWithAlpha(MaterialTheme.TEXT_COLOR_SECONDARY, alpha);
-        RenderUtil.drawString(title, x + 6, ry + 4, titleColor);
-        RenderUtil.drawString(value, x + width - 6 - RenderUtil.getStringWidth(value), ry + 4, valueColor);
+
+        RenderUtil.drawString(title, x + 4, ry + 5, titleColor);
+
+        float valW = RenderUtil.getStringWidth(value) + 8;
+        float valX = x + width - valW - 4;
+        RoundedUtils.drawRoundedRect(valX, ry + 2, valW, 16, 3f,
+                MaterialTheme.getRGBWithAlpha(
+                        binding ? MaterialTheme.PRIMARY_COLOR : MaterialTheme.DROPDOWN_BG,
+                        binding ? (int)(alpha * 0.3f) : alpha));
+        RenderUtil.drawString(value, valX + 4, ry + 5, valueColor);
     }
 
     @Override

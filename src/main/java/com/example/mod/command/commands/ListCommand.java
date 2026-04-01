@@ -24,8 +24,8 @@ public class ListCommand implements Command {
         List<Module> modules = new ArrayList<>(moduleManager.all());
         modules.sort((a, b) -> a.name().compareToIgnoreCase(b.name()));
         for (Module m : modules) {
-            String statusColor = m.enabled() ? "§aon" : "§coff";
-            ChatUtil.sendFormatted(m.name() + "(" + statusColor + "§r)");
+            String statusColor = m.enabled() ? "§aON" : "§cOFF";
+            ChatUtil.sendPrefixedFormatted(m.name() + "(" + statusColor + "§r)");
         }
     }
 }

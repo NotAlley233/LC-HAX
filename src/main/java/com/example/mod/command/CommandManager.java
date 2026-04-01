@@ -34,14 +34,24 @@ public class CommandManager {
      * myau-compatible entry: accepts the full message including leading dot.
      */
     public void handleCommand(String string) {
-        List<String> params = Arrays.asList(string.substring(1).trim().split("\\s+"));
-        ArrayList<String> args = new ArrayList<>(params);
-
-        if (params.isEmpty() || params.get(0).isEmpty()) {
-            ChatUtil.error("Unknown command");
+        if (string == null || string.length() < 2) {
+            ChatUtil.sendPrefixedFormatted("&cUnknown command&r");
             return;
         }
 
+        String body = string.substring(1).trim();
+        if (body.isEmpty()) {
+            ChatUtil.sendPrefixedFormatted("&cUnknown command&r");
+            return;
+        }
+
+        List<String> params = Arrays.asList(body.split("\\s+"));
+        if (params.isEmpty() || params.get(0).isEmpty()) {
+            ChatUtil.sendPrefixedFormatted("&cUnknown command&r");
+            return;
+        }
+
+        ArrayList<String> args = new ArrayList<>(params);
         String root = params.get(0);
         for (Command command : commands) {
             for (String name : command.names()) {
@@ -49,15 +59,14 @@ public class CommandManager {
                     try {
                         command.runCommand(args);
                     } catch (Throwable t) {
-                        ChatUtil.error("Command failed (" + root + ")");
-                        t.printStackTrace();
+                        ChatUtil.sendPrefixedFormatted(String.format("&cCommand failed (&o&e%s&c)&r", root));
                     }
                     return;
                 }
             }
         }
 
-        ChatUtil.error("Unknown command (" + root + ")");
+        ChatUtil.sendPrefixedFormatted(String.format("&cUnknown command (&o&e%s&c)&r", root));
     }
 
     public ModuleManager modules() {

@@ -9,22 +9,27 @@ public final class RainbowUtil {
     private RainbowUtil() {}
 
     public static String rainbow(String input) {
+        return rainbowOffset(input, 0, true);
+    }
+
+    public static String rainbowOffset(String input, int startOffset, boolean appendReset) {
         if (input == null || input.isEmpty()) return "";
 
+        int offset = startOffset % COLORS.length;
+        if (offset < 0) offset += COLORS.length;
+
         StringBuilder out = new StringBuilder(input.length() * 3);
-        int colorIdx = 0;
+        int colorIdx = offset;
 
         for (int i = 0; i < input.length(); i++) {
             char ch = input.charAt(i);
 
-            // Preserve existing formatting codes (e.g. "§a")
             if (ch == SECTION && i + 1 < input.length()) {
                 out.append(ch).append(input.charAt(i + 1));
                 i++;
                 continue;
             }
 
-            // Don't color spaces; keeps gradient aligned to visible chars.
             if (ch == ' ') {
                 out.append(' ');
                 continue;
@@ -34,9 +39,9 @@ public final class RainbowUtil {
             colorIdx++;
         }
 
-        // Reset formatting after prefix so it doesn't bleed into message body.
-        out.append(SECTION).append('r');
+        if (appendReset) {
+            out.append(SECTION).append('r');
+        }
         return out.toString();
     }
 }
-

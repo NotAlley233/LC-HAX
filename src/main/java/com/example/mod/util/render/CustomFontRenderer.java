@@ -1,10 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- *
- * Could not load the following classes:
- *  net.minecraft.client.renderer.texture.DynamicTexture
- *  org.lwjgl.opengl.GL11
- */
 package com.example.mod.util.render;
 
 import java.awt.Color;
@@ -20,9 +13,12 @@ import net.minecraft.client.renderer.texture.DynamicTexture;
 import org.lwjgl.opengl.GL11;
 
 public class CustomFontRenderer {
+    private static final int TEX_SIZE = 512;
     private final DynamicTexture texture;
     private final int[] widths = new int[256];
-    private final int height;
+    private final int[] charPosX = new int[256];
+    private final int[] charPosY = new int[256];
+    private final int cellHeight;
 
     public CustomFontRenderer(String fontPath, int size) {
         try (InputStream is = this.getClass().getResourceAsStream(fontPath)) {
@@ -30,22 +26,21 @@ public class CustomFontRenderer {
                 throw new RuntimeException("Font not found: " + fontPath);
             }
             Font baseFont = Font.createFont(Font.TRUETYPE_FONT, is).deriveFont(Font.PLAIN, (float) size);
-            this.height = 16 + size / 2;
-            this.texture = this.generateTexture(baseFont);
-        }
-        catch (FontFormatException | IOException e) {
+            this.cellHeight = size + size / 2;
+            this.texture = generateTexture(baseFont);
+        } catch (FontFormatException | IOException e) {
             throw new RuntimeException("Failed to load font: " + fontPath, e);
         }
     }
 
     public CustomFontRenderer(Font font, int size) {
         Font baseFont = font.deriveFont(Font.PLAIN, (float) size);
-        this.height = 16 + size / 2;
-        this.texture = this.generateTexture(baseFont);
+        this.cellHeight = size + size / 2;
+        this.texture = generateTexture(baseFont);
     }
 
     private DynamicTexture generateTexture(Font font) {
-        BufferedImage img = new BufferedImage(512, 512, BufferedImage.TYPE_INT_ARGB);
+        BufferedImage img = new BufferedImage(TEX_SIZE, TEX_SIZE, BufferedImage.TYPE_INT_ARGB);
         Graphics2D g = img.createGraphics();
         g.setFont(font);
         g.setColor(Color.WHITE);
@@ -53,19 +48,19 @@ public class CustomFontRenderer {
         g.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS, RenderingHints.VALUE_FRACTIONALMETRICS_ON);
         int x = 0;
         int y = 0;
-        for (int i = 0; i < 256; ++i) {
+        for (int i = 0; i < 256; i++) {
             char c = (char) i;
             if (c == '\n' || c == '\r') continue;
             int w = g.getFontMetrics().charWidth(c);
-            if (w <= 0) {
-                w = 1;
-            }
+            if (w <= 0) w = 1;
             this.widths[i] = w;
-            if (x + w > 512) {
+            if (x + w > TEX_SIZE) {
                 x = 0;
-                y += this.height;
+                y += this.cellHeight;
             }
-            g.drawString(String.valueOf(c), x, y + this.height - 4);
+            this.charPosX[i] = x;
+            this.charPosY[i] = y;
+            g.drawString(String.valueOf(c), x, y + this.cellHeight - 4);
             x += w;
         }
         g.dispose();
@@ -73,47 +68,61 @@ public class CustomFontRenderer {
     }
 
     public void drawString(String text, float x, float y, int color) {
+        if (text == null || text.isEmpty()) return;
+        GL11.glPushAttrib(GL11.GL_ENABLE_BIT | GL11.GL_COLOR_BUFFER_BIT);
         GL11.glEnable(GL11.GL_TEXTURE_2D);
         GL11.glEnable(GL11.GL_BLEND);
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
         GlStateManager.bindTexture(this.texture.getGlTextureId());
+
         float alpha = (float) (color >> 24 & 0xFF) / 255.0f;
         float red = (float) (color >> 16 & 0xFF) / 255.0f;
         float green = (float) (color >> 8 & 0xFF) / 255.0f;
         float blue = (float) (color & 0xFF) / 255.0f;
         GL11.glColor4f(red, green, blue, alpha);
+
         float posX = x;
-        for (char c : text.toCharArray()) {
-            int w;
-            if (c >= '\u0100' || (w = this.widths[c]) <= 0) continue;
-            float u = 0.0f;
-            float v = 0.0f;
-            GL11.glBegin(GL11.GL_QUADS);
-            GL11.glTexCoord2f(u, v);
+        GL11.glBegin(GL11.GL_QUADS);
+        for (int i = 0; i < text.length(); i++) {
+            char c = text.charAt(i);
+            if (c >= 256) continue;
+            int w = this.widths[c];
+            if (w <= 0) continue;
+
+            float u0 = (float) this.charPosX[c] / TEX_SIZE;
+            float v0 = (float) this.charPosY[c] / TEX_SIZE;
+            float u1 = (float) (this.charPosX[c] + w) / TEX_SIZE;
+            float v1 = (float) (this.charPosY[c] + this.cellHeight) / TEX_SIZE;
+
+            GL11.glTexCoord2f(u0, v0);
             GL11.glVertex2f(posX, y);
-            GL11.glTexCoord2f(u, 1.0f);
-            GL11.glVertex2f(posX, y + (float) this.height);
-            GL11.glTexCoord2f(1.0f, 1.0f);
-            GL11.glVertex2f(posX + (float) w, y + (float) this.height);
-            GL11.glTexCoord2f(1.0f, v);
-            GL11.glVertex2f(posX + (float) w, y);
-            GL11.glEnd();
-            posX += (float) w;
+            GL11.glTexCoord2f(u0, v1);
+            GL11.glVertex2f(posX, y + this.cellHeight);
+            GL11.glTexCoord2f(u1, v1);
+            GL11.glVertex2f(posX + w, y + this.cellHeight);
+            GL11.glTexCoord2f(u1, v0);
+            GL11.glVertex2f(posX + w, y);
+
+            posX += w;
         }
+        GL11.glEnd();
+
         GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-        GL11.glDisable(GL11.GL_BLEND);
+        GL11.glPopAttrib();
     }
 
     public int getStringWidth(String text) {
+        if (text == null) return 0;
         int width = 0;
-        for (char c : text.toCharArray()) {
-            if (c >= '\u0100') continue;
+        for (int i = 0; i < text.length(); i++) {
+            char c = text.charAt(i);
+            if (c >= 256) continue;
             width += this.widths[c];
         }
         return width;
     }
 
     public int getFontHeight() {
-        return this.height;
+        return this.cellHeight;
     }
 }

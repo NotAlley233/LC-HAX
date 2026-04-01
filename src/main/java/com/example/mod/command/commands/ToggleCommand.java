@@ -54,7 +54,6 @@ public class ToggleCommand implements Command {
 
         m.setEnabled(!m.enabled());
         configStore.saveFrom(moduleManager, propertyManager);
-        ChatUtil.sendFormatted(String.format("%s: %s&r", m.name(), m.enabled() ? "&a&lON" : "&c&lOFF"));
     }
 
     private static boolean equalsAnyIgnoreCase(String s, String... options) {

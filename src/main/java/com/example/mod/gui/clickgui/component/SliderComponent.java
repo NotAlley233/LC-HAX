@@ -12,7 +12,7 @@ public class SliderComponent extends UiComponent {
     private float display = 0f;
 
     public SliderComponent(IntProperty property) {
-        super(0, 0, 0, 20);
+        super(0, 0, 0, 24);
         this.property = property;
     }
 
@@ -22,22 +22,37 @@ public class SliderComponent extends UiComponent {
         int alpha = (int) (255 * alphaProgress);
         int min = property.getMin();
         int max = property.getMax();
+
         if (dragging) {
-            float pct = Math.max(0f, Math.min(1f, (mouseX - (x + 6f)) / (width - 12f)));
+            float pct = Math.max(0f, Math.min(1f, (mouseX - (x + 4f)) / (width - 8f)));
             property.setValue((int) (min + (max - min) * pct));
         }
-        float target = (property.getValue() - min) / (float) (max - min);
-        display = AnimationUtil.lerp(display, target, 0.2f);
 
-        RenderUtil.drawString(property.getName(), x + 2, ry + 2, MaterialTheme.getRGBWithAlpha(MaterialTheme.TEXT_COLOR, alpha));
+        float target = (max == min) ? 0 : (property.getValue() - min) / (float) (max - min);
+        display = AnimationUtil.lerp(display, target, 0.18f);
+
+        RenderUtil.drawString(property.getName(), x + 4, ry + 2,
+                MaterialTheme.getRGBWithAlpha(MaterialTheme.TEXT_COLOR, alpha));
         String valStr = String.valueOf(property.getValue());
-        RenderUtil.drawString(valStr, x + width - RenderUtil.getStringWidth(valStr) - 2, ry + 2, MaterialTheme.getRGBWithAlpha(MaterialTheme.TEXT_COLOR, alpha));
-        int trackY = (int) (ry + height - 8);
-        RoundedUtils.drawRoundedRect(x + 2, trackY, width - 4, 4, 2f, new java.awt.Color(40, 40, 45).getRGB());
-        int accent = MaterialTheme.getRGBWithAlpha(MaterialTheme.PRIMARY_COLOR, alpha);
-        RoundedUtils.drawRoundedRect(x + 2, trackY, (width - 4) * display, 4, 2f, accent, true, false, false, true);
-        float knobX = x + 2 + (width - 4) * display - 2;
-        RoundedUtils.drawRoundedRect(knobX, trackY - 2, 4, 8, 2f, 0xFFFFFFFF);
+        RenderUtil.drawString(valStr, x + width - RenderUtil.getStringWidth(valStr) - 4, ry + 2,
+                MaterialTheme.getRGBWithAlpha(MaterialTheme.TEXT_COLOR_SECONDARY, alpha));
+
+        float trackH = 5f;
+        float trackY = ry + height - 9;
+        float trackW = width - 8f;
+        RoundedUtils.drawRoundedRect(x + 4, trackY, trackW, trackH, trackH / 2f,
+                MaterialTheme.getRGBWithAlpha(MaterialTheme.SLIDER_TRACK, alpha));
+
+        float filledW = trackW * display;
+        if (filledW > 1f) {
+            RoundedUtils.drawRoundedRect(x + 4, trackY, filledW, trackH, trackH / 2f,
+                    MaterialTheme.getRGBWithAlpha(MaterialTheme.PRIMARY_COLOR, alpha));
+        }
+
+        float knobCx = x + 4 + trackW * display;
+        float knobCy = trackY + trackH / 2f;
+        RoundedUtils.drawCircle(knobCx, knobCy, 4f,
+                new java.awt.Color(255, 255, 255, alpha).getRGB());
     }
 
     @Override
@@ -49,8 +64,6 @@ public class SliderComponent extends UiComponent {
 
     @Override
     public void mouseReleased(int mouseX, int mouseY, int state, int scrollOffset) {
-        if (state == 0) {
-            dragging = false;
-        }
+        if (state == 0) dragging = false;
     }
 }

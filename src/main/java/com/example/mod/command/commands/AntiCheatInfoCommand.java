@@ -26,17 +26,17 @@ public class AntiCheatInfoCommand implements Command {
             ChatUtil.error("AntiCheat 未初始化");
             return;
         }
-        ChatUtil.sendFormatted("§bAntiCheat §7(" + (antiCheat.enabled() ? "§aon" : "§coff") + "§7)");
-        ChatUtil.sendFormatted("§7violationLevel: §f" + antiCheat.getViolationLevel());
-        ChatUtil.sendFormatted("§7detectAutoBlock: §f" + antiCheat.isDetectAutoBlock());
-        ChatUtil.sendFormatted("§7detectNoSlow: §f" + antiCheat.isDetectNoSlow());
-        ChatUtil.sendFormatted("§7detectLegitScaffold: §f" + antiCheat.isDetectLegitScaffold());
-        ChatUtil.sendFormatted("§7detectKillaura: §f" + antiCheat.isDetectKillaura());
-        ChatUtil.sendFormatted("§7flagPingSound: §f" + antiCheat.isFlagPingSound());
-        ChatUtil.sendFormatted("§7flagWDRButton: §f" + antiCheat.isFlagWDRButton());
-        ChatUtil.sendFormatted("§7debugMessages: §f" + antiCheat.isDebugMessages());
-        ChatUtil.sendFormatted("§7trackedPlayers: §f" + antiCheat.getTrackedPlayers());
-        ChatUtil.sendFormatted("§7flags: §fAutoBlock=" + antiCheat.getFlagCount("AutoBlock")
+        ChatUtil.sendPrefixedFormatted("§bAntiCheat §7(" + (antiCheat.enabled() ? "§aON" : "§cOFF") + "§7)");
+        ChatUtil.sendPrefixedFormatted("§7violationLevel: §f" + antiCheat.getViolationLevel());
+        ChatUtil.sendPrefixedFormatted("§7detectAutoBlock: §f" + antiCheat.isDetectAutoBlock());
+        ChatUtil.sendPrefixedFormatted("§7detectNoSlow: §f" + antiCheat.isDetectNoSlow());
+        ChatUtil.sendPrefixedFormatted("§7detectLegitScaffold: §f" + antiCheat.isDetectLegitScaffold());
+        ChatUtil.sendPrefixedFormatted("§7detectKillaura: §f" + antiCheat.isDetectKillaura());
+        ChatUtil.sendPrefixedFormatted("§7flagPingSound: §f" + antiCheat.isFlagPingSound());
+        ChatUtil.sendPrefixedFormatted("§7flagWDRButton: §f" + antiCheat.isFlagWDRButton());
+        ChatUtil.sendPrefixedFormatted("§7debugMessages: §f" + antiCheat.isDebugMessages());
+        ChatUtil.sendPrefixedFormatted("§7trackedPlayers: §f" + antiCheat.getTrackedPlayers());
+        ChatUtil.sendPrefixedFormatted("§7flags: §fAutoBlock=" + antiCheat.getFlagCount("AutoBlock")
                 + " §fNoSlow=" + antiCheat.getFlagCount("NoSlow")
                 + " §fLegitScaffold=" + antiCheat.getFlagCount("Legit Scaffold")
                 + " §fKillaura=" + antiCheat.getFlagCount("Killaura")

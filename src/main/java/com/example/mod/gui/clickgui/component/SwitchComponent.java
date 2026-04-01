@@ -11,7 +11,7 @@ public class SwitchComponent extends UiComponent {
     private float anim = 0f;
 
     public SwitchComponent(BooleanProperty property) {
-        super(0, 0, 0, 20);
+        super(0, 0, 0, 22);
         this.property = property;
     }
 
@@ -19,21 +19,28 @@ public class SwitchComponent extends UiComponent {
     public void draw(int mouseX, int mouseY, float partialTicks, int scrollOffset, float alphaProgress) {
         float ry = y - scrollOffset;
         int alpha = (int) (255 * alphaProgress);
-        anim = AnimationUtil.lerp(anim, property.getValue() ? 1f : 0f, 0.2f);
-        RenderUtil.drawString(property.getName(), x + 2, ry + 6, MaterialTheme.getRGBWithAlpha(MaterialTheme.TEXT_COLOR, alpha));
+        anim = AnimationUtil.lerp(anim, property.getValue() ? 1f : 0f, 0.18f);
 
-        float trackX = x + width - 34;
-        float trackY = ry + 5;
-        int disabledColor = new java.awt.Color(60, 60, 65).getRGB();
-        int enabledColor = MaterialTheme.getRGB(MaterialTheme.PRIMARY_COLOR);
-        int switchColor = blendColor(disabledColor, enabledColor, anim);
-        if (alpha < 255) {
-            java.awt.Color c = new java.awt.Color(switchColor);
-            switchColor = new java.awt.Color(c.getRed(), c.getGreen(), c.getBlue(), alpha).getRGB();
-        }
-        RoundedUtils.drawRoundedRect(trackX, trackY, 22, 12, 6f, switchColor);
-        float knobX = trackX + 1 + 14f * anim;
-        RoundedUtils.drawRoundedRect(knobX, trackY + 1, 10, 10, 5f, 0xFFFFFFFF);
+        RenderUtil.drawString(property.getName(), x + 4, ry + 6,
+                MaterialTheme.getRGBWithAlpha(MaterialTheme.TEXT_COLOR, alpha));
+
+        float trackW = 26f;
+        float trackH = 13f;
+        float trackX = x + width - trackW - 4;
+        float trackY = ry + (height - trackH) / 2f;
+
+        int trackColor = MaterialTheme.blendColor(
+                MaterialTheme.getRGBWithAlpha(MaterialTheme.SWITCH_OFF, alpha),
+                MaterialTheme.getRGBWithAlpha(MaterialTheme.PRIMARY_COLOR, alpha),
+                anim);
+        RoundedUtils.drawRoundedRect(trackX, trackY, trackW, trackH, trackH / 2f, trackColor);
+
+        float knobSize = trackH - 3f;
+        float knobTravel = trackW - knobSize - 3f;
+        float knobX = trackX + 1.5f + knobTravel * anim;
+        float knobY = trackY + 1.5f;
+        RoundedUtils.drawRoundedRect(knobX, knobY, knobSize, knobSize, knobSize / 2f,
+                new java.awt.Color(255, 255, 255, alpha).getRGB());
     }
 
     @Override
@@ -41,19 +48,5 @@ public class SwitchComponent extends UiComponent {
         if (mouseButton == 0 && hovered(mouseX, mouseY, scrollOffset)) {
             property.setValue(!property.getValue());
         }
-    }
-
-    private int blendColor(int from, int to, float t) {
-        float clamped = Math.max(0f, Math.min(1f, t));
-        int fr = (from >> 16) & 255;
-        int fg = (from >> 8) & 255;
-        int fb = from & 255;
-        int tr = (to >> 16) & 255;
-        int tg = (to >> 8) & 255;
-        int tb = to & 255;
-        int r = (int) (fr + (tr - fr) * clamped);
-        int g = (int) (fg + (tg - fg) * clamped);
-        int b = (int) (fb + (tb - fb) * clamped);
-        return (0xFF << 24) | (r << 16) | (g << 8) | b;
     }
 }

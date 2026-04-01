@@ -18,12 +18,10 @@ import java.util.stream.Collectors;
 public class ModuleCommand implements Command {
     private final ModuleManager moduleManager;
     private final PropertyManager propertyManager;
-    private final String clientName;
 
-    public ModuleCommand(ModuleManager moduleManager, PropertyManager propertyManager, String clientName) {
+    public ModuleCommand(ModuleManager moduleManager, PropertyManager propertyManager) {
         this.moduleManager = moduleManager;
         this.propertyManager = propertyManager;
-        this.clientName = clientName;
     }
 
     @Override
@@ -36,23 +34,22 @@ public class ModuleCommand implements Command {
         // args[0] is the module name root
         Module module = moduleManager.get(args.get(0));
         if (module == null) {
-            ChatUtil.sendFormatted(String.format("%sModule not found (&o%s&r)&r", clientName, args.get(0)));
+            ChatUtil.sendPrefixedFormatted(String.format("&cModule not found (&o&e%s&c)&r", args.get(0)));
             return;
         }
 
         if (args.size() >= 2) {
             Property<?> property = propertyManager.getProperty(module, args.get(1));
             if (property == null) {
-                ChatUtil.sendFormatted(String.format("%s%s has no property &o%s&r", clientName, module.name(), args.get(1)));
+                ChatUtil.sendPrefixedFormatted(String.format("&b%s&c has no property &o&e%s&r", module.name(), args.get(1)));
                 return;
             }
 
             boolean isBool = property instanceof BooleanProperty;
             if (args.size() < 3 && !isBool) {
-                ChatUtil.sendFormatted(
+                ChatUtil.sendPrefixedFormatted(
                         String.format(
-                                "%s%s: &o%s&r is set to %s&r (%s)&r",
-                                clientName,
+                                "&b%s&7: &o&e%s&r &7is set to &a%s&r &8(&7%s&8)&r",
                                 module.name(),
                                 property.getName(),
                                 property.formatValue(),
@@ -65,16 +62,16 @@ public class ModuleCommand implements Command {
             String newValue = args.size() < 3 ? null : String.join(" ", args.subList(2, args.size()));
             try {
                 if (property.parseString(newValue)) {
-                    ChatUtil.sendFormatted(
-                            String.format("%s%s: &o%s&r has been set to %s&r", clientName, module.name(), property.getName(), property.formatValue())
+                    ChatUtil.sendPrefixedFormatted(
+                            String.format("&b%s&7: &o&e%s&r &7has been set to &a%s&r", module.name(), property.getName(), property.formatValue())
                     );
                     return;
                 }
             } catch (Exception ignored) {
             }
 
-            ChatUtil.sendFormatted(
-                    String.format("%sInvalid value for property &o%s&r (%s)&r", clientName, property.getName(), property.getValuePrompt())
+            ChatUtil.sendPrefixedFormatted(
+                    String.format("&cInvalid value for property &o&e%s&r &8(&7%s&8)&r", property.getName(), property.getValuePrompt())
             );
             return;
         }
@@ -83,15 +80,14 @@ public class ModuleCommand implements Command {
         if (props != null) {
             List<Property<?>> visible = props.stream().filter(Property::isVisible).collect(Collectors.toList());
             if (!visible.isEmpty()) {
-                ChatUtil.sendFormatted(String.format("%s%s:&r", clientName, module.name()));
+                ChatUtil.sendPrefixedFormatted(String.format("&b%s&7:&r", module.name()));
                 for (Property<?> p : visible) {
-                    ChatUtil.sendFormatted(String.format("&7»&r %s: %s&r", p.getName(), p.formatValue()));
+                    ChatUtil.sendPrefixedFormatted(String.format("&7»&r &e%s&7: &a%s&r", p.getName(), p.formatValue()));
                 }
                 return;
             }
         }
 
-        ChatUtil.sendFormatted(String.format("%s%s has no properties&r", clientName, module.name()));
+        ChatUtil.sendPrefixedFormatted(String.format("&e%s &7has no properties&r", module.name()));
     }
 }
-

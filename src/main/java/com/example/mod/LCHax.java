@@ -24,6 +24,7 @@ import com.example.mod.module.modules.advanced.AntiCheat;
 import com.example.mod.module.modules.advanced.Eagle;
 import com.example.mod.module.modules.advanced.NoHitDelay;
 import com.example.mod.module.modules.bedwars.BedTracker;
+import com.example.mod.module.modules.skywars.StrengthESP;
 import com.example.mod.property.PropertyManager;
 import com.example.mod.property.properties.FloatProperty;
 import com.example.mod.property.properties.BooleanProperty;
@@ -58,13 +59,15 @@ public class LCHax implements ModInitializer {
         moduleManager.register(new Eagle());
         moduleManager.register(new NoHitDelay());
         moduleManager.register(new BedTracker());
+        moduleManager.register(new StrengthESP());
         moduleManager.register(new Cape());
 
         Path configPath = ConfigStore.defaultConfigPath("lchax.json");
         ConfigStore configStore = new ConfigStore(configPath);
 
+        KeyBindingManager keyBindingManager = new KeyBindingManager();
         PropertyManager propertyManager = new PropertyManager();
-        moduleManager.register(new ClickGUIModule(moduleManager, propertyManager));
+        moduleManager.register(new ClickGUIModule(moduleManager, propertyManager, keyBindingManager));
         ClickGUIModule clickGUIModule = (ClickGUIModule) moduleManager.get("clickgui");
         if (clickGUIModule != null) {
             propertyManager.register(
@@ -163,6 +166,19 @@ public class LCHax implements ModInitializer {
             );
         }
 
+        StrengthESP strengthESP = (StrengthESP) moduleManager.get("strengthesp");
+        if (strengthESP != null) {
+            propertyManager.register(
+                    strengthESP,
+                    new BooleanProperty("enabled", strengthESP::enabled, strengthESP::setEnabled),
+                    new IntProperty("durationMs", strengthESP::getDurationMs, strengthESP::setDurationMs, 1000, 10000),
+                    new IntProperty("red", strengthESP::getRed, strengthESP::setRed, 0, 255),
+                    new IntProperty("green", strengthESP::getGreen, strengthESP::setGreen, 0, 255),
+                    new IntProperty("blue", strengthESP::getBlue, strengthESP::setBlue, 0, 255),
+                    new IntProperty("alpha", strengthESP::getAlpha, strengthESP::setAlpha, 0, 255)
+            );
+        }
+
         Cape cape = (Cape) moduleManager.get("cape");
         if (cape != null) {
             propertyManager.register(
@@ -184,7 +200,7 @@ public class LCHax implements ModInitializer {
         commandManager.register(new ListCommand(moduleManager));
         commandManager.register(new ToggleCommand(moduleManager, configStore, propertyManager));
         commandManager.register(new PrefixCommand(configStore));
-        commandManager.register(new ModuleCommand(moduleManager, propertyManager, ""));
+        commandManager.register(new ModuleCommand(moduleManager, propertyManager));
         commandManager.register(new AntiCheatInfoCommand(antiCheatModule));
 
         ModContext.setCommandManager(commandManager);
@@ -193,7 +209,6 @@ public class LCHax implements ModInitializer {
         Path newConfigDir = Paths.get("run", ".weave", "mods", "lchax");
         ModLogger.init(newConfigDir);
 
-        KeyBindingManager keyBindingManager = new KeyBindingManager();
         ConfigManager newConfigManager = new ConfigManager(newConfigDir, moduleManager, propertyManager, keyBindingManager);
 
         try {
