@@ -138,9 +138,9 @@ public class StrengthESP extends BaseModule implements Tickable {
     private final Consumer<ChatReceiveEvent> chatListener = this::onChatReceived;
     private int durationMs = 5000;
     private int red = 255;
-    private int green = 51;
-    private int blue = 51;
-    private int alpha = 217;
+    private int green = 0;
+    private int blue = 0;
+    private int alpha = 255;
 
     public StrengthESP() {
         super("strengthesp", "Highlights recent killers in SkyWars.", Category.RENDER, false);

@@ -5,6 +5,9 @@ import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.util.ResourceLocation;
 
 import java.io.*;
+import java.nio.FloatBuffer;
+
+import org.lwjgl.BufferUtils;
 
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL20.*;
@@ -108,6 +111,19 @@ public class ShaderUtil {
         int loc = glGetUniformLocation(programID, name);
         if (args.length > 1) glUniform2i(loc, args[0], args[1]);
         else glUniform1i(loc, args[0]);
+    }
+
+    /**
+     * Uploads a float array (e.g. {@code uniform float weights[256]}) to the active program.
+     */
+    public void setUniform1fv(String name, float[] values, int count) {
+        int loc = glGetUniformLocation(programID, name);
+        if (loc < 0 || count <= 0) return;
+        FloatBuffer buf = BufferUtils.createFloatBuffer(count);
+        buf.put(values, 0, count);
+        buf.flip();
+        // LWJGL 2: glUniform1(location, FloatBuffer) for float vectors/arrays
+        glUniform1(loc, buf);
     }
 
     public static void drawQuads(float x, float y, float width, float height) {
@@ -276,10 +292,10 @@ public class ShaderUtil {
             "\n" +
             "void main() {\n" +
             "    vec2 rectHalf = rectSize * .5;\n" +
-            "\n" +
-            "    float smoothedAlpha =  (1.0-smoothstep(0.0, 1.0, roundSDF(rectHalf - (gl_TexCoord[0].st * rectSize), rectHalf - radius - 1., radius))) * color.a;\n" +
+            "    float d = roundSDF(rectHalf - (gl_TexCoord[0].st * rectSize), rectHalf - radius - 1., radius);\n" +
+            "    float aa = max(1.1, 2.8 * fwidth(d));\n" +
+            "    float smoothedAlpha = (1.0 - smoothstep(0.0, aa, d)) * color.a;\n" +
             "    gl_FragColor = vec4(color.rgb, smoothedAlpha);\n" +
-            "\n" +
             "}";
 
     private final String kawaseUpBloom = "#version 120\n" +

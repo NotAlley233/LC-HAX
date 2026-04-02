@@ -6,9 +6,11 @@ import com.example.mod.module.Category;
 import com.example.mod.module.KeyBindingManager;
 import com.example.mod.module.Module;
 import com.example.mod.module.ModuleManager;
+import com.example.mod.module.modules.ClickGUIModule;
 import com.example.mod.property.Property;
 import com.example.mod.property.PropertyManager;
 import com.example.mod.util.render.AnimationUtil;
+import com.example.mod.util.render.GlowRenderer;
 import com.example.mod.util.render.GuiAnimationUtil;
 import com.example.mod.util.render.RenderUtil;
 import com.example.mod.util.render.RoundedUtils;
@@ -26,6 +28,11 @@ import java.util.List;
 import java.util.Map;
 
 public class ClickGuiScreen extends GuiScreen {
+
+    private static final float PANEL_GLOW_BLUR_RADIUS = 14.0f;
+    private static final float PANEL_GLOW_EXPOSURE = 2.5f;
+
+    private final ModuleManager moduleManager;
 
     private final Map<Category, List<ModuleEntry>> modulesByCategory = new LinkedHashMap<>();
     private final List<Category> categories = new ArrayList<>();
@@ -51,6 +58,7 @@ public class ClickGuiScreen extends GuiScreen {
     private int sidebarW, contentX, contentY, contentW, contentH;
 
     public ClickGuiScreen(ModuleManager moduleManager, PropertyManager propertyManager, KeyBindingManager keyBindingManager) {
+        this.moduleManager = moduleManager;
         for (Category category : Category.values()) {
             List<Module> modules = new ArrayList<>();
             for (Module module : moduleManager.all()) {
@@ -85,6 +93,11 @@ public class ClickGuiScreen extends GuiScreen {
         contentH = panelH - HEADER_HEIGHT;
     }
 
+    private boolean shouldDrawPanelGlow() {
+        Module m = moduleManager.get("clickgui");
+        return m instanceof ClickGUIModule && ((ClickGUIModule) m).isPanelGlow();
+    }
+
     @Override
     public void initGui() {
         super.initGui();
@@ -101,10 +114,30 @@ public class ClickGuiScreen extends GuiScreen {
         int alpha = closing ? Math.max(0, (int) (255 * progress)) : 255;
         float overlayAlpha = closing ? 0.55f * progress : 0.55f;
 
+        if (shouldDrawPanelGlow() && progress > 0.02f) {
+            java.awt.Color primary = MaterialTheme.PRIMARY_COLOR;
+            float pr = primary.getRed() / 255.0f;
+            float pg = primary.getGreen() / 255.0f;
+            float pb = primary.getBlue() / 255.0f;
+            final float px = panelX;
+            final float py = panelY;
+            final float pw = panelW;
+            final float ph = panelH;
+            float exp = PANEL_GLOW_EXPOSURE * progress;
+            GlowRenderer.drawOuterGlow(
+                    () -> RoundedUtils.drawRoundedRect(
+                            px, py, pw, ph,
+                            MaterialTheme.CORNER_RADIUS_PANEL,
+                            0xFFFFFFFF),
+                    PANEL_GLOW_BLUR_RADIUS,
+                    Math.max(0.15f, exp),
+                    pr, pg, pb);
+        }
+
         drawRect(0, 0, this.width, this.height, RenderUtil.applyOpacity(0xFF08080C, overlayAlpha));
 
         ShadowUtil.drawShadow(panelX, panelY, panelW, panelH,
-                MaterialTheme.CORNER_RADIUS_PANEL, 18f,
+                MaterialTheme.CORNER_RADIUS_PANEL, 22f,
                 new java.awt.Color(0, 0, 0, (int) (110 * progress)).getRGB());
 
         RoundedUtils.drawRoundedRect(panelX, panelY, panelW, panelH,

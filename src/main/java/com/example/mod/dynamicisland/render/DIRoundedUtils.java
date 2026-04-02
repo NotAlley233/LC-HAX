@@ -1,14 +1,19 @@
-package com.example.mod.util.render;
+package com.example.mod.dynamicisland.render;
 
+import com.example.mod.util.render.ShaderUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.gui.ScaledResolution;
 import org.lwjgl.opengl.GL11;
 
-public class RoundedUtils {
-
+/**
+ * Rounded-rect renderer for DynamicIsland.
+ * Ported from the clickgui rounded-rect approach to make shadows match visually.
+ */
+public final class DIRoundedUtils {
     private static ShaderUtil roundedRectShader;
     private static boolean roundedRectShaderFailed;
+
+    private DIRoundedUtils() {}
 
     private static ShaderUtil getRoundedRectShader() {
         if (roundedRectShaderFailed) return null;
@@ -28,14 +33,14 @@ public class RoundedUtils {
     }
 
     public static void drawRoundedRect(float x, float y, float width, float height, float radius, int color,
-                                        boolean topLeft, boolean topRight, boolean bottomLeft, boolean bottomRight) {
+                                         boolean topLeft, boolean topRight, boolean bottomLeft, boolean bottomRight) {
         if (width <= 0 || height <= 0) return;
         int alphaCheck = (color >>> 24) & 0xFF;
         if (alphaCheck == 0 && color != 0) color = color | 0xFF000000;
 
         float r = Math.min(radius, Math.min(width, height) * 0.5f);
         if (r <= 0.5f || (!topLeft && !topRight && !bottomLeft && !bottomRight)) {
-            RenderUtil.drawRect(x, y, width, height, color);
+            DIRenderUtil.drawRectWH(x, y, width, height, color);
             return;
         }
 
@@ -61,8 +66,7 @@ public class RoundedUtils {
         float blue = (float) (color & 255) / 255.0F;
 
         Minecraft mc = Minecraft.getMinecraft();
-        ScaledResolution sr = new ScaledResolution(mc);
-        int sf = sr.getScaleFactor();
+        int sf = new net.minecraft.client.gui.ScaledResolution(mc).getScaleFactor();
 
         GlStateManager.enableBlend();
         GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
@@ -128,40 +132,11 @@ public class RoundedUtils {
         GL11.glPopAttrib();
     }
 
-    public static void drawCircle(float cx, float cy, float radius, int color) {
-        if (radius <= 0) return;
-        float a = (float) (color >> 24 & 255) / 255.0F;
-        float red = (float) (color >> 16 & 255) / 255.0F;
-        float green = (float) (color >> 8 & 255) / 255.0F;
-        float blue = (float) (color & 255) / 255.0F;
-
-        GL11.glPushAttrib(GL11.GL_ENABLE_BIT | GL11.GL_COLOR_BUFFER_BIT);
-        GL11.glDisable(GL11.GL_TEXTURE_2D);
-        GL11.glEnable(GL11.GL_BLEND);
-        GL11.glDisable(GL11.GL_CULL_FACE);
-        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-        GL11.glColor4f(red, green, blue, a);
-
-        GL11.glBegin(GL11.GL_TRIANGLE_FAN);
-        GL11.glVertex2f(cx, cy);
-        for (int i = 0; i <= 360; i += 1) {
-            double rad = Math.toRadians(i);
-            GL11.glVertex2f(cx + (float) Math.cos(rad) * radius, cy + (float) Math.sin(rad) * radius);
-        }
-        GL11.glEnd();
-
-        GL11.glEnable(GL11.GL_TEXTURE_2D);
-        GL11.glPopAttrib();
-    }
-
     private static void addArcVertices(float cx, float cy, float r, int startAngle, int endAngle) {
         for (int i = startAngle; i <= endAngle; i += 1) {
             double rad = Math.toRadians(i);
             GL11.glVertex2f(cx + (float) Math.cos(rad) * r, cy + (float) Math.sin(rad) * r);
         }
     }
-
-    public static void drawOutlineRect(float x, float y, float width, float height, float lineWidth, int color, int ignored) {
-        RenderUtil.drawOutlineRect(x, y, width, height, lineWidth, color);
-    }
 }
+

@@ -14,6 +14,8 @@ public class ClickGUIModule extends BaseModule {
     private final PropertyManager propertyManager;
     private final KeyBindingManager keyBindingManager;
     private boolean productFont = false;
+    /** Panel outer glow in ClickGUI (optional). */
+    private boolean panelGlow = false;
 
     public ClickGUIModule(ModuleManager moduleManager, PropertyManager propertyManager, KeyBindingManager keyBindingManager) {
         super("clickgui", "Open Click GUI.", Category.RENDER, false);
@@ -39,5 +41,13 @@ public class ClickGUIModule extends BaseModule {
     public void setProductFont(boolean productFont) {
         this.productFont = productFont;
         RenderUtil.setUseProductFont(productFont);
+    }
+
+    public boolean isPanelGlow() {
+        return panelGlow;
+    }
+
+    public void setPanelGlow(boolean panelGlow) {
+        this.panelGlow = panelGlow;
     }
 }

@@ -9,11 +9,11 @@ public final class ShadowUtil {
         int g = (color >> 8) & 0xFF;
         int b = color & 0xFF;
 
-        int layers = Math.max(8, (int) size);
+        int layers = Math.max(6, Math.min(20, (int) (size * 0.55f + 4f)));
         for (int i = layers; i >= 1; i--) {
             float t = (float) i / layers;
-            float gaussian = (float) Math.exp(-4.0 * t * t);
-            int a = Math.max(0, Math.min(255, (int) (baseAlpha * gaussian * 0.45f)));
+            float gaussian = (float) Math.exp(-3.4f * t * t);
+            int a = Math.max(0, Math.min(255, (int) (baseAlpha * gaussian * 0.5f)));
             if (a <= 0) continue;
             int shadow = (a << 24) | (r << 16) | (g << 8) | b;
             float grow = t * size;

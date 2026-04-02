@@ -6,6 +6,7 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.util.AxisAlignedBB;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.Color;
@@ -172,5 +173,42 @@ public class RenderUtil {
             return customFont.getStringWidth(text);
         }
         return Minecraft.getMinecraft().fontRendererObj.getStringWidth(text);
+    }
+
+    public static void drawFilledBoundingBox(AxisAlignedBB bb, float r, float g, float b, float a) {
+        Tessellator tessellator = Tessellator.getInstance();
+        WorldRenderer wr = tessellator.getWorldRenderer();
+
+        wr.begin(7, DefaultVertexFormats.POSITION_COLOR);
+        wr.pos(bb.minX, bb.minY, bb.minZ).color(r, g, b, a).endVertex();
+        wr.pos(bb.minX, bb.maxY, bb.minZ).color(r, g, b, a).endVertex();
+        wr.pos(bb.maxX, bb.maxY, bb.minZ).color(r, g, b, a).endVertex();
+        wr.pos(bb.maxX, bb.minY, bb.minZ).color(r, g, b, a).endVertex();
+
+        wr.pos(bb.minX, bb.minY, bb.maxZ).color(r, g, b, a).endVertex();
+        wr.pos(bb.maxX, bb.minY, bb.maxZ).color(r, g, b, a).endVertex();
+        wr.pos(bb.maxX, bb.maxY, bb.maxZ).color(r, g, b, a).endVertex();
+        wr.pos(bb.minX, bb.maxY, bb.maxZ).color(r, g, b, a).endVertex();
+
+        wr.pos(bb.minX, bb.minY, bb.minZ).color(r, g, b, a).endVertex();
+        wr.pos(bb.minX, bb.minY, bb.maxZ).color(r, g, b, a).endVertex();
+        wr.pos(bb.minX, bb.maxY, bb.maxZ).color(r, g, b, a).endVertex();
+        wr.pos(bb.minX, bb.maxY, bb.minZ).color(r, g, b, a).endVertex();
+
+        wr.pos(bb.maxX, bb.minY, bb.minZ).color(r, g, b, a).endVertex();
+        wr.pos(bb.maxX, bb.maxY, bb.minZ).color(r, g, b, a).endVertex();
+        wr.pos(bb.maxX, bb.maxY, bb.maxZ).color(r, g, b, a).endVertex();
+        wr.pos(bb.maxX, bb.minY, bb.maxZ).color(r, g, b, a).endVertex();
+
+        wr.pos(bb.minX, bb.minY, bb.minZ).color(r, g, b, a).endVertex();
+        wr.pos(bb.maxX, bb.minY, bb.minZ).color(r, g, b, a).endVertex();
+        wr.pos(bb.maxX, bb.minY, bb.maxZ).color(r, g, b, a).endVertex();
+        wr.pos(bb.minX, bb.minY, bb.maxZ).color(r, g, b, a).endVertex();
+
+        wr.pos(bb.minX, bb.maxY, bb.minZ).color(r, g, b, a).endVertex();
+        wr.pos(bb.minX, bb.maxY, bb.maxZ).color(r, g, b, a).endVertex();
+        wr.pos(bb.maxX, bb.maxY, bb.maxZ).color(r, g, b, a).endVertex();
+        wr.pos(bb.maxX, bb.maxY, bb.minZ).color(r, g, b, a).endVertex();
+        tessellator.draw();
     }
 }

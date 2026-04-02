@@ -1,6 +1,7 @@
 package com.example.mod.module;
 
 import com.example.mod.core.ToggleAnnouncements;
+import com.example.mod.module.modules.render.DynamicIsland;
 import com.example.mod.util.ChatUtil;
 import net.weavemc.api.event.EventBus;
 
@@ -41,6 +42,17 @@ public abstract class BaseModule implements Module {
     public void setEnabled(boolean enabled) {
         if (this.enabled == enabled) return;
         this.enabled = enabled;
+
+        // Push module toggle notifications into DynamicIsland.
+        // Skip DynamicIsland itself to avoid self-trigger loops.
+        if (!"dynamicisland".equalsIgnoreCase(this.name)) {
+            try {
+                DynamicIsland.onModuleToggle(this.name, enabled);
+            } catch (Throwable ignored) {
+                // Keep module toggling robust even if DynamicIsland isn't initialized.
+            }
+        }
+
         if (enabled) {
             EventBus.subscribe(this);
             onEnable();

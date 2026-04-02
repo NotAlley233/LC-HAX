@@ -23,11 +23,11 @@ public final class MaterialTheme {
     public static final Color DROPDOWN_BG = new Color(26, 26, 32);
     public static final Color DROPDOWN_HOVER = new Color(255, 255, 255, 8);
 
-    public static final float CORNER_RADIUS_PANEL = 10.0f;
-    public static final float CORNER_RADIUS_FRAME = 8.0f;
-    public static final float CORNER_RADIUS_ITEM = 5.0f;
-    public static final float CORNER_RADIUS_TAB = 6.0f;
-    public static final float CORNER_RADIUS_SEARCH = 5.0f;
+    public static final float CORNER_RADIUS_PANEL = 14.0f;
+    public static final float CORNER_RADIUS_FRAME = 12.0f;
+    public static final float CORNER_RADIUS_ITEM = 8.0f;
+    public static final float CORNER_RADIUS_TAB = 9.0f;
+    public static final float CORNER_RADIUS_SEARCH = 8.0f;
 
     public static int getRGB(Color color) {
         return color.getRGB();
